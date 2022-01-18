@@ -66,9 +66,9 @@ class: center, middle, frame
 
 # Game 1: (Spies versus Agents)
 
-**Surprise**! I choose *N* of you at random to be **spies**! 
+**Surprise**! I choose *N* of us at random to be **spies**! 
 
-- The remaining *10 - N* of you were **agents**. 
+- The remaining *10 - N* of us are **agents**. 
 
 - Spies and Agents had different success probabilities (i.e., probability of "1")!
 
