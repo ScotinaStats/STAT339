@@ -118,20 +118,22 @@ gf_histogram( ~ mix_prop, binwidth = 0.02) +
 
 Suppose we have a random sample of $n=10$ cell phones, and we record their **battery life** (in minutes), $Y_{1},Y_{2},\dots,Y_{10}$.
 
-- We assume that the sample comes from an **Exponential** distribution with density function $$f(y\mid\theta)=\frac{1}{\theta}e^{-y/\theta},\quad y>0, $$ where $\theta$ is *unknown*. 
+- We assume that the sample comes from an **Exponential** distribution with density function $$f(y\mid\theta)=\frac{1}{\theta}e^{-y/\theta},\quad y>0, $$ where $\theta$ is **unknown**. 
 
 - **Note**: If $Y\sim Exp(\theta)$, then the *expected value* $E(Y)=\theta$. 
 
 --
 
-Using the information provided to your group, try to **estimate** $\theta$. 
+Using the information provided to your group (I'll message you), try to **estimate** $\theta$. 
+
+--
 
 ```{r, echo = FALSE}
 set.seed(228)
 battery = round(rexp(10, rate = 1/228))
 ```
 
-- **Group 1**: *Data* $\{741, 136,  97, 206, 437, 656, 551, 589, 123, 403\}$
+- **Group 1**: *The Raw Data* $\{741, 136,  97, 206, 437, 656, 551, 589, 123, 403\}$
 
 - **Group 2**: *Sample Minimum* $Y_{(1)}=97$
 
