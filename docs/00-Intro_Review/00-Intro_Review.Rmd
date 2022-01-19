@@ -129,15 +129,15 @@ Using the information provided to your group (I'll message you), try to **estima
 --
 
 ```{r, echo = FALSE}
-set.seed(228)
+set.seed(338)
 battery = round(rexp(10, rate = 1/339))
 ```
 
-- **Group 1**: *The Raw Data* $\{1102, 202, 144, 306, 650, 976, 820, 876, 184, 599\}$
+- **Group 1**: *The Raw Data* $\{393,  21, 211, 514,  73, 108, 116, 708, 387, 241\}$
 
-- **Group 2**: *Sample Minimum* $Y_{(1)}=144$
+- **Group 2**: *Sample Minimum* $Y_{(1)}=21$
 
-- **Group 3**: *Sample Mean* $\bar{Y}=585.9$
+- **Group 3**: *Sample Mean* $\bar{Y}=277.2$
 
 
 
