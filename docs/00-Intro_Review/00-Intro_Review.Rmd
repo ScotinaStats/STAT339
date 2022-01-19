@@ -130,14 +130,14 @@ Using the information provided to your group (I'll message you), try to **estima
 
 ```{r, echo = FALSE}
 set.seed(228)
-battery = round(rexp(10, rate = 1/228))
+battery = round(rexp(10, rate = 1/339))
 ```
 
-- **Group 1**: *The Raw Data* $\{741, 136,  97, 206, 437, 656, 551, 589, 123, 403\}$
+- **Group 1**: *The Raw Data* $\{1102, 202, 144, 306, 650, 976, 820, 876, 184, 599\}$
 
-- **Group 2**: *Sample Minimum* $Y_{(1)}=97$
+- **Group 2**: *Sample Minimum* $Y_{(1)}=144$
 
-- **Group 3**: *Sample Mean* $\bar{Y}=393.9$
+- **Group 3**: *Sample Mean* $\bar{Y}=585.9$
 
 
 
