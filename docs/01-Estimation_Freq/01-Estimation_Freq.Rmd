@@ -76,18 +76,6 @@ knitr::include_graphics("bob.jpeg")
 
 ---
 
-# Parameter Estimation
-
-**General Context**: Use the information contained in a *sample* to make inferences about the *population* from which the sample is taken. 
-
-.center[
-```{r, echo = FALSE, out.width = "65%"}
-knitr::include_graphics("big_picture.png")
-```
-]
-
----
-
 # Examples
 
 1. **Clinical Trial**: What is the risk of major adverse cardiovascular events (MACE) for T2D patients while taking certain treatment regimens?
