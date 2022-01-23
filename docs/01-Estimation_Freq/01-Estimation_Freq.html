@@ -195,9 +195,11 @@ Let `\(Y_{1},Y_{2},\dots,Y_{n}\sim Uniform(0,\theta)\)`, where the *target param
 
 # Order Statistics as Estimators
 
-Let `\(Y_{1},Y_{2},\dots,Y_{n}\)` denote a random sample of size `\(n\)` from a population whose density is given by `$$f(y\mid\alpha)=3\alpha^{3}y^{-4},\quad \alpha\leq y,$$` where `\(\alpha&gt;0\)` is unknown. That is, `\(Y_{i}\sim Pareto(\alpha,\beta=3)\)`, where in general `$$E(Y_{i})=\alpha\beta/(\beta-1).$$` 
+Let `\(Y_{1},Y_{2},\dots,Y_{n}\)` denote a random sample of size `\(n\)` from a population whose density is given by `$$f(y\mid\alpha)=3\alpha^{3}y^{-4},\quad \alpha\leq y,$$` where `\(\alpha&gt;0\)` is unknown. That is, `\(Y_{i}\sim Pareto(\alpha,\beta=3)\)`, where in general `$$E(Y_{i})=\alpha\beta/(\beta-1)\quad\text{and}\quad Var(Y_{i})=\frac{\alpha^{2}\beta}{(\beta-1)^{2}(\beta-2)}.$$` 
 
 Show that `\(\hat{\alpha}=Y_{(1)}=\min(Y_{1},Y_{2},\dots,Y_{n})\)` is a *biased* estimator for `\(\alpha\)`. 
+
+- **Note**: If `\(Y_{1},Y_{2},\dots,Y_{n}\sim iid\ Pareto(\alpha,\beta)\)`, then `$$Y_{(1)}\sim Pareto(\alpha,n\beta).$$`
 
 ---
 
