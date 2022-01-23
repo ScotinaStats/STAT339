@@ -232,6 +232,7 @@ Let $Y_{1},Y_{2},\dots,Y_{n}\sim Uniform(0,\theta)$, where the *target parameter
 
 ---
 
+```{r, echo = FALSE, eval = FALSE}
 # Order Statistics as Estimators
 
 Let $Y_{1},Y_{2},\dots,Y_{n}$ denote a random sample of size $n$ from a population whose density is given by $$f(y\mid\alpha)=3\alpha^{3}y^{-4},\quad \alpha\leq y,$$ where $\alpha>0$ is unknown. That is, $Y_{i}\sim Pareto(\alpha,\beta=3)$, where in general $$E(Y_{i})=\alpha\beta/(\beta-1)\quad\text{and}\quad Var(Y_{i})=\frac{\alpha^{2}\beta}{(\beta-1)^{2}(\beta-2)}.$$ 
@@ -241,6 +242,7 @@ Show that $\hat{\alpha}=Y_{(1)}=\min(Y_{1},Y_{2},\dots,Y_{n})$ is a *biased* est
 - **Note**: If $Y_{1},Y_{2},\dots,Y_{n}\sim iid\ Pareto(\alpha,\beta)$, then $$Y_{(1)}\sim Pareto(\alpha,n\beta).$$
 
 ---
+```
 
 # Common Unbiased Point Estimators
 
@@ -254,15 +256,16 @@ Suppose $Y_{1},\dots,Y_{n}$ are a *random sample* from some population with mean
 
 **Sample Variance**
 
-It turns out that $$\hat{\theta}=\frac{1}{n}\sum_{i=1}^{n}(Y_{i}-\bar{Y})^{2}$$ is **biased** for $\sigma^{2}$. 
+It turns out that $$S^{2*}=\frac{1}{n}\sum_{i=1}^{n}(Y_{i}-\bar{Y})^{2}$$ is **biased** for $\sigma^{2}$. 
 
 - How can we find an **unbiased** estimator for $\sigma^{2}$? 🤔
 
 ---
 
+```{r, echo = FALSE, eval = FALSE}
 # Estimator for Binomial Variance
 
-If $Y$ has a binomial distribution with parameters $n$ and $p$, then we have seen that $\hat{p}=Y/n$ is an unbiased estimator for $p$. 
+If $Y$ has a binomial distribution with parameters $n$ and $p$, then we can use $\hat{p}=Y/n$ as an unbiased estimator for $p$. 
 
 To estimate the *variance* of $Y$, where $Var(Y)=np(1-p)$, we generally use $$\widehat{Var}(Y)=n\hat{p}\left(1-\hat{p}\right).$$
 
@@ -271,6 +274,7 @@ To estimate the *variance* of $Y$, where $Var(Y)=np(1-p)$, we generally use $$\w
 2. Modify $n\hat{p}\left(1-\hat{p}\right)$ slightly to form an *unbiased* estimator of $Var(Y)$. 
 
 ---
+```
 
 # Bias/Variance Trade-off
 
