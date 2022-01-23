@@ -212,7 +212,7 @@ Suppose that $\hat{\theta}$ is an estimator for a parameter $\theta$ and $E(\hat
 
 1. In terms of $a$, $b$, and $\theta$, what is $Bias(\hat{\theta})$?
 
-2. find a function of $\hat{\theta}$ - say, $\hat{\theta}^{*}$ - that is an unbiased estimator for $\theta$. 
+2. Find a function of $\hat{\theta}$, say, $\hat{\theta}^{*}$, that is an unbiased estimator for $\theta$. 
 
 3. Express $MSE(\hat{\theta}^{*})$ as a function of $Var(\hat{\theta})$. 
 
