@@ -10,8 +10,6 @@ output:
     nature:
       countIncrementalSlides: false
       highlightLines: true
-    includes:
-      after_body: "collapseoutput.js"
 ---
 
 ```{r xaringan-themer, include = FALSE}
@@ -19,7 +17,7 @@ library(xaringanthemer)
 library(xaringanExtra)
 
 mono_accent(base_color = "#5E5E5E") #3E8A83?
-options(htmltools.preserve.raw = FALSE)
+#options(htmltools.preserve.raw = FALSE)
 
 # collapseoutput.js from https://gist.github.com/emitanaka/eaa258bb8471c041797ff377704c8505#file-collapseoutput-js
 ```
@@ -122,7 +120,7 @@ A **point estimator** (or *statistic*), $\hat{\theta}$, is the rule/formula used
 
 .center[
 ```{r, echo = FALSE}
-knitr::include_graphics("estimator.jpg")
+knitr::include_graphics("estimator.png")
 ```
 ]
 
