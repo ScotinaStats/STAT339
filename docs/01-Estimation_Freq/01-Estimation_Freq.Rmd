@@ -374,7 +374,7 @@ We define the $k$th **sample moment** as the average, $$m_{k}^{'}=\frac{1}{n}\su
 
 <br>
 
-**Method of Moments (MOM)**: Set $\mu_{k}^{'}=m_{k}^{'}$, for $k=1,2,\dots,t$ ($t=$ number of parameters to be estimated) and *solve* for the parameter(s) of interest. 
+**Method of Moments (MOM)**: Set $\mu_{k}^{'}=m_{k}^{'}$, for $k=1,2,\dots,t$ (*t* = number of parameters to be estimated) and *solve* for the parameter(s) of interest. 
 
 ---
 
@@ -385,6 +385,20 @@ Let $Y_{1},Y_{2},\dots,Y_{n}\sim iid\ Uniform(0,\theta)$.
 - $\mu_{1}^{'}=E(Y)=\theta/2$
 
 - $m_{1}^{'}=\bar{Y}=\frac{1}{n}\sum_{i=1}^{n}Y_{i}$
+
+---
+
+# MOM Estimators for Normal parameters
+
+Suppose we have a random sample $Y_{1},Y_{2},\dots,Y_{n}\sim iid\ Normal(\mu,\sigma^{2})$. 
+
+- Find the MOM estimators for $\mu$ and $\sigma^{2}$. 
+
+--
+
+- $\tilde{\mu}=\bar{Y}$ $\implies$ **unbiased** for $\mu$! 
+
+- $\tilde{\sigma}^{2}=\frac{1}{n}\sum_{i=1}^{n}(Y_{i}-\bar{Y})^{2}$ $\implies$ **biased** for $\sigma^{2}$
 
 ---
 
@@ -409,20 +423,6 @@ We need to solve the system of equations for $\alpha$ and $\beta$.
 - $\tilde{\alpha}=\frac{n\bar{Y}^{2}}{\sum_{i=1}^{n}(Y_{i}-\bar{Y})^{2}}$
 
 - $\tilde{\beta}=\frac{\bar{Y}}{\tilde{\alpha}}=\frac{\sum_{i=1}^{n}(Y_{i}-\bar{Y})^{2}}{n\bar{Y}}$
-
----
-
-# MOM Estimators for Normal parameters
-
-Suppose we have a random sample $Y_{1},Y_{2},\dots,Y_{n}\sim iid\ Normal(\mu,\sigma^{2})$. 
-
-- Find the MOM estimators for $\mu$ and $\sigma^{2}$. 
-
---
-
-- $\tilde{\mu}=\bar{X}$ $\implies$ **unbiased** for $\mu$! 
-
-- $\tilde{\sigma}^{2}=\frac{1}{n}\sum_{i=1}^{n}(Y_{i}-\bar{Y})^{2}$ $\implies$ **biased** for $\sigma^{2}$
 
 ---
 
