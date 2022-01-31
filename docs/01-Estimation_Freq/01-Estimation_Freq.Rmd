@@ -677,7 +677,7 @@ Therefore, $\hat{\theta}_{MLE}=Y_{(n)}$.
 
 - MLEs do not always exist.
 
-- The MLE is **NOT** the most likely parameter, *given the data* ($E(\theta\mid Y)$). It estimates the parameter $\theta$ that maximizes the distribution of $Y\mid \theta$
+- The MLE is **NOT** the most likely parameter, *given the data*, $E(\theta\mid Y)$. It estimates the parameter $\theta$ that maximizes the distribution of $Y\mid \theta$
     - In other words, the MLE gives the parameter estimate most likely to have produced the observed data. 
 
 ---
