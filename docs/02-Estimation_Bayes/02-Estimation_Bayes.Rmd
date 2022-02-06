@@ -97,7 +97,7 @@ Using **Bayes' Rule**, we can calculate the **posterior probability** of whether
 
 Thus, after *balancing* our **prior** information and the information present in the **data**, we have developed a **posterior** understanding of whether an article is real. 
 
-- Equivalently, there is a ~**89%** *posterior probability* that an article is *fake*, given the presence of an exclamation point in the title. 8
+- Equivalently, there is a ~**89%** *posterior probability* that an article is *fake*, given the presence of an exclamation point in the title.
 
 ---
 
@@ -285,10 +285,10 @@ Suppose, *in reality*, we observe that $Y=12$. That is, in our sample of 30 rand
 
 ```{r, echo = FALSE, fig.align='center', dpi = 300, fig.height = 4, fig.width = 6, out.width = "47%"}
 plot_binomial_likelihood(y = 12, n = 30) + 
-  labs(x = expression(theta), y = expression(paste("P(",Y==30, " | ", theta, ")")))
+  labs(x = expression(theta), y = expression(paste("P(",Y==12, " | ", theta, ")")))
 ```
 
-- $P(Y=30\mid\theta=0.4)=\binom{30}{12}0.4^{12}(1-0.4)^{18}\approx 0.147$
+- $P(Y=12\mid\theta=0.4)=\binom{30}{12}0.4^{12}(1-0.4)^{18}\approx 0.147$
 
 ---
 
@@ -969,7 +969,7 @@ class: center, middle, frame
 
 ---
 
-# Estimating $\theta$
+# Estimating θ
 
 **Recall**: Rather than treat the parameter $\theta$ as a *fixed value*, a *Bayesian framework* assumes that $\theta$ is a *random variable* with a probability distribution. 
 
@@ -988,7 +988,7 @@ In the **Animal Crossing** example, we used the following model:
     
 ---
 
-# Estimating $\theta$
+# Estimating θ
 
 - $\theta\sim Beta(10, 40)$
 - $Y\mid\theta\sim Binomial(30, \theta)$ 
