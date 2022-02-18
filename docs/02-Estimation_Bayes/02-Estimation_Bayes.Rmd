@@ -755,6 +755,7 @@ A **Gamma** prior for $\lambda$ would work here! (trust me)
 - $\lambda\sim Gamma(\alpha,\beta$)
 
 - $f(\lambda)=\frac{\beta^{\alpha}}{\Gamma(\alpha)}\lambda^{\alpha-1}e^{-\beta\lambda},\quad \lambda>0$
+    - **Note**: This is the *alternate* form of the Gamma with $\beta$ as a *rate* parameter. 
 
 ---
 
@@ -782,8 +783,8 @@ While we originally derived the Gamma-Poisson conjugacy in general terms, let's 
 
 If $\lambda\sim Gamma(\alpha,\beta)$, then:
 
-- $E(\lambda)=\alpha\beta$ 
-- $Var(\lambda)=\alpha\beta^{2}$
+- $E(\lambda)=\alpha/\beta$ 
+- $Var(\lambda)=\alpha/\beta^{2}$
 
 Let's try to choose $\alpha$ and $\beta$ such that $E(\lambda)\approx 5$ and $Var(\lambda)\approx 3$
 
