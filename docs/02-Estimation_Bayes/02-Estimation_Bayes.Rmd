@@ -635,7 +635,7 @@ Suppose we still want to estimate the **proportion**, $\theta$, of college stude
 
 --
 
-However, instead of $\theta\sim Beta$, we choose a different probability distribution: $$f(\theta)=(3/2)\theta^{2}+\theta,\quad 0\leq\theta\leq 1$$. 
+However, instead of $\theta\sim Beta$, we choose a different probability distribution: $$f(\theta)=(3/2)\theta^{2}+\theta,\quad 0\leq\theta\leq 1$$
 
 ```{r, echo = FALSE, fig.align='center', dpi = 300, fig.width = 6, fig.height = 4, out.width = "40%"}
 f_y = function(y){
@@ -673,7 +673,7 @@ y = seq(0, 1, by = 0.01)
 gf_line(f_y(y) ~ y, size = 2) + 
   labs(x = expression(theta), 
        y = expression(paste("f(", theta, ")")), 
-       title = expression(paste("f(", theta, ") = (3/2)", y^2 + y))) 
+       title = expression(paste("f(", theta, ") = (3/2)", theta^2 + theta))) 
 ```
 ]
 
