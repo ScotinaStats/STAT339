@@ -1078,14 +1078,6 @@ In the Animal Crossing example...
 
 ---
 
-# Sensitivity of Estimators
-
-How sensitive are our results to *different priors*?
-
-- Either way, we observe $Y=12$ Animal Crossing players out of 30, but let's play with different priors. 
-
----
-
 # Functions of $\theta$
 
 We can also derive Bayes estimators for *functions of* $\theta$. 
