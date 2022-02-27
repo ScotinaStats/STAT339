@@ -439,7 +439,7 @@ Consider the following:
 
 - **Prior**: `\(\theta\sim Gamma(\alpha,\beta)\)`, where `$$f(\theta)=\frac{\beta^{\alpha}}{\Gamma(\alpha)}\theta^{\alpha-1}e^{-\beta\theta}$$`
 
-- **Likelihood**: `\(Y_{1},Y_{2},\dots,Y_{n}\mid\theta\sim Exponential(\theta)\)`, where `$$f(y_{i}\mid\theta)=\theta e^{-\beta\theta}$$`
+- **Likelihood**: `\(Y_{1},Y_{2},\dots,Y_{n}\mid\theta\sim Exponential(\theta)\)`, where `$$f(y_{i}\mid\theta)=\theta e^{-\theta y_{i}}$$`
 
 Let's derive the **posterior distribution**, `\(\theta\mid \mathbf{Y}\)`.
 
@@ -898,7 +898,7 @@ The *posterior median* isn't as straightforward to calculate as the *posterior m
     ```
     
     ```
-    ## [1] 0.2745092
+    ## [1] 0.2741637
     ```
    
 --
