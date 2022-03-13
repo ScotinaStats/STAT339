@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>STAT 339: Statistical Theory</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Anthony Scotina" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <link href="libs/panelset-0.2.6/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset-0.2.6/panelset.js"></script>
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+    <link rel="stylesheet" href="my-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# STAT 339: Statistical Theory
+## Frequentist Interval Estimation
+### Anthony Scotina
+
+---
+
+
+
+
+
+
+
+
+
+
+&lt;!--
+pagedown::chrome_print("~/Dropbox/Teaching/03-Simmons Courses/STAT338-Probability Theory/Slides/06-Functions_RVs/06-Functions_RVs.html")
+--&gt;
+
+class: center, middle, frame
+
+# Pivotal Quantities
+
+---
+
+# What's better than a point estimate?
+
+.center[
+&lt;img src="03-Intervals_Freq_files/figure-html/unnamed-chunk-3-1.png" width="60%" /&gt;
+]
+
+--
+
+.pull-left[
+&lt;img src="upgrade.jpeg" width="140" /&gt;
+]
+
+.center[
+&lt;img src="03-Intervals_Freq_files/figure-html/unnamed-chunk-5-1.png" width="60%" /&gt;
+]
+
+---
+
+# Confidence Interval
+
+*Ideally*, an interval estimate (or, **confidence interval**) will...
+
+1. contain the *target parameter*, `\(\theta\)`
+
+2. be relatively narrow
+
+--
+
+A `\((1-\alpha)\times100\%\)` **confidence interval** is an interval `\([\hat{\theta}_{L}, \hat{\theta}_{U}]\)` such that `$$P(\hat{\theta}_{L}\leq\theta\leq\hat{\theta}_{U})=1-\alpha,$$` where `\(1-\alpha\)` is the **confidence coefficient**. 
+
+- If `\(1-\alpha\)` is *high*, we can be highly *confident* that the confidence interval (based on a *single sample*) will contain `\(\theta\)`. 
+
+--
+
+🚨**Note**: `\(\hat{\theta}_{L}\)` and `\(\hat{\theta}_{U}\)` are *random variables* and functions of the *data* `\(Y_{1},\dots,Y_{n}\)`. 
+
+---
+
+# Pivotal Quantities
+
+To find `\(\hat{\theta}_{L}\)` and `\(\hat{\theta}_{U}\)`, it is useful to *first* find a **pivotal quantity**, `\(V\)`, for `\(\theta\)`:
+
+1. `\(V\)` is a function of the sample measurements `\(Y_{1},\dots,Y_{n}\)` and the unknown parameter `\(\theta\)`, where `\(\theta\)` is the *only* unknown quantity. 
+
+2. Its probability distribution does *not* depend on `\(\theta\)`. 
+
+--
+
+&lt;br&gt;
+
+We will primarily work with **location-scale** pivotal quantities. For example, `$$V=\frac{g(\mathbf{Y})}{\theta}$$` is a **scale** pivotal quantity, and `$$P(a\leq V\leq b)=P\left(a\leq\frac{g(\mathbf{Y})}{\theta}\leq b\right)=P\left(\frac{g(\mathbf{Y})}{b}\leq\theta\leq \frac{g(\mathbf{Y})}{a}\right)=1-\alpha$$`
+
+---
+
+# Gamma Pivot
+
+Suppose `\(Y_{1},\dots,Y_{n}\sim iid\ Exponential(\theta)\)`. 
+
+**Facts from STAT 338**:
+
+- `\(\sum_{i=1}^{n}Y_{i}=Y_{1}+\cdots+Y_{n}\sim Gamma(n, \theta)\)`
+
+- `\(V=2(Y_{1}+\cdots+Y_{n})/\theta\sim \chi^{2}(df=2n)\)`
+
+--
+
+&lt;br&gt;
+
+We can use `\(V\)` as a **pivotal quantity**, because...
+
+1. `\(V\)` is a function of the **DATA**, `\(Y_{1},\dots,Y_{n}\)` and the *unknown parameter* `\(\theta\)`.
+
+2. The probability distribution of `\(V\)`, `\(\chi^{2}(2n)\)`, *does not depend on* `\(\theta\)`.
+
+---
+
+# Using the Gamma Pivot
+
+We will use `\(V=2(Y_{1}+\cdots+Y_{n})/\theta\sim \chi^{2}(df=2n)\)` as a *pivotal quantity* in forming a *confidence interval* for `\(\theta\)`. 
+
+- But now, suppose that `\(n=10\)`. In other words, `\(V\sim \chi^{2}(20)\)`. 
+
+&gt; Let's find a 99% confidence interval for `\(\theta\)`.
+
+--
+
+**Want**: `\(P(a\leq V\leq b)=0.99\)`
+
+--
+
+- Use *quantiles* for the *middle* 99%: `\(\chi^{2}_{0.005}(20)=7.434\)`; `\(\chi^{2}_{0.995}(20)=39.997\)`
+
+&lt;img src="03-Intervals_Freq_files/figure-html/unnamed-chunk-6-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Using the Gamma Pivot to Form a CI!
+
+**Want**: `\(P(a\leq V\leq b)=0.99\)`
+
+- Now we **have** `\(P(7.434\leq V\leq39.997)=0.99\)`! 👀
+
+This means we can write out `$$P\left(7.434\leq\frac{2\sum_{i=1}^{n}Y_{i}}{\theta}\leq 39.997\right)=0.99,$$` and then *rearrange* so that `\(\theta\)` is alone in the middle. 
+
+- This gives us a 99% **confidence interval** *estimate* for `\(\theta\)`. 
+
+---
+
+
+
+class: center, middle, frame
+
+# Large Sample Confidence Intervals
+
+---
+
+# Common Unbiased Point Estimators
+
+(From WMS, page 397)
+
+.center[
+&lt;img src="wms_table_8_1.png" width="75%" /&gt;
+]
+
+--
+
+🚨**Note**: The standard deviation of the *sampling distribution* for `\(\hat{\theta}\)` is usually called the **standard error** of `\(\hat{\theta}\)`, `\(SE(\hat{\theta})=\sigma_{\hat{\theta}}\)`. 
+
+---
+
+# Revisiting the CLT
+
+The **Central Limit Theorem** can be used to show that each of these four point estimators have *approximately Normal* distributions for large samples. 
+
+- In other words, for each of these four point estimators, `$$\hat{\theta}\sim N(\theta,\sigma_{\hat{\theta}}^{2})\quad\text{or}\quad\frac{\hat{\theta}-\theta}{\sigma_{\hat{\theta}}}\sim N(0, 1)$$`
+
+--
+
+Because `\(Z=\frac{\hat{\theta}-\theta}{\sigma_{\hat{\theta}}}\)` has these characteristics:
+
+1. It is a function of the sample measurements `\(Y_{1},\dots,Y_{n}\)` and the unknown parameter `\(\theta\)`, and...
+
+2. Its probability distribution, `\(N(0,1)\)`, does *not* depend on `\(\theta\)`, 
+
+it follows that `\(Z=\frac{\hat{\theta}-\theta}{\sigma_{\hat{\theta}}}\)` is a **pivotal quantity** and we can use it to build **confidence intervals** for `\(\theta\)`.
+
+- (when the sample is *large*)
+
+---
+
+# Building a Large Sample CI
+
+**Want**: `\(P(\hat{\theta}_{L}\leq \theta\leq \hat{\theta}_{U})=1-\alpha\)`
+
+- Because `\(Z=\frac{\hat{\theta}-\theta}{\sigma_{\hat{\theta}}}\sim N(0,1)\)`, and the Normal distribution is **symmetric**, we can use the following: `$$P\left(-z_{\alpha/2}\leq \frac{\hat{\theta}-\theta}{\sigma_{\hat{\theta}}}\leq z_{\alpha/2}\right)=1-\alpha,$$` where `\(z_{\alpha/2}\)` is a Normal distribution *quantile*.
+
+--
+
+**Example**: If `\(1-\alpha=0.95\)`, `\(\alpha=0.05\)` and `\(z_{\alpha/2}=1.96\)`.
+
+&lt;img src="03-Intervals_Freq_files/figure-html/unnamed-chunk-9-1.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# A Large Sample CI
+
+The endpoints for a `\(100(1-\alpha)\%\)` **confidence interval** for `\(\theta\)` are given by:
+
+- `\(\hat{\theta}_{L}=\hat{\theta}-z_{\alpha/2}\sigma_{\hat{\theta}}\)`
+
+- `\(\hat{\theta}_{U}=\hat{\theta}-z_{\alpha/2}\sigma_{\hat{\theta}}\)`
+
+--
+
+🤔How can we find `\(z_{\alpha/2}\)`? Use ~~table in back of textbook~~ **R**!
+
+- Specifically, `qnorm(...)`
+
+--
+
+&lt;br&gt;
+
+**Example**: 90% CI `\(\implies 1-\alpha=0.90\implies\alpha/2 = 0.05\)`
+
+
+```r
+qnorm(0.05, lower.tail = FALSE)
+```
+
+```
+## [1] 1.644854
+```
+
+---
+
+# Back to Piéchart Emporium (yet again)
+
+.center[
+&lt;img src="piechart_emporium.png" width="258" /&gt;
+]
+
+**Goal** 👇👇👇
+
+&gt; Construct a 90% confidence interval for `\(\mu\)`, the true average shopping time (in mins) per customer.
+
+--
+
+**The Data** 📊
+
+- `\(n=144\)` randomly selected customers
+    - `\(\bar{y}=30\)` mins
+    - `\(s=12\)` mins
+    
+---
+
+# A Large-Sample CI for μ
+
+The endpoints for the `\(100(1-\alpha)\%\)` **confidence interval** for `\(\theta\)` can be obtained by: `$$\hat{\theta}\pm z_{\alpha/2}\sigma_{\hat{\theta}}$$`
+
+In this example...
+
+- `\(\hat{\theta}=\bar{y}=30\)`
+
+- `\(1-\alpha=0.90\implies \alpha/2 = 0.05\)`
+
+- `\(\sigma_{\hat{\theta}}=\sigma/\sqrt{n}=\sigma/\sqrt{144}=🤔\)`
+
+--
+
+The *sample standard deviation*, `\(S\)`, is **consistent** for `\(\sigma\)`. So in **large samples**, `$$\bar{y}\pm z_{\alpha/2}\left(\frac{\sigma}{\sqrt{n}}\right)\approx \bar{y}\pm z_{\alpha/2}\left(\frac{s}{\sqrt{n}}\right).$$`
+
+---
+
+# One-sided CIs
+
+Using similar derivations, we can also determine `\(100(1-\alpha)\%\)` **one-sided confidence limits**:
+
+- `\(100(1-\alpha)\%\)` *lower bound* for `\(\theta\)` is `\(\hat{\theta}_{L}=\hat{\theta}-z_{\alpha}\sigma_{\hat{\theta}}\)`
+
+- `\(100(1-\alpha)\%\)` *upper bound* for `\(\theta\)` is `\(\hat{\theta}_{U}=\hat{\theta}+z_{\alpha}\sigma{\hat{\theta}}\)`
+
+--
+
+These limits satisfy the following:
+
+- `\(P(\hat{\theta}_{L}\leq\theta)=1-\alpha\)`, with CI `\([\hat{\theta}_{L},\infty)\)`
+
+- `\(P(\theta\leq\hat{\theta}_{U})=1-\alpha\)`, with CI `\((-\infty, \hat{\theta}_{U}]\)`
+
+&lt;br&gt;
+
+&gt; Let's construct a 90% *lower confidence bound* for `\(\mu\)`, the true average shopping time (in mins) per customer
+
+---
+
+# A Large-Sample CI for p
+
+In a poll of 1001 adults, 51% claim to be baseball fans. 
+
+&gt; Find a 99% confidence interval for `\(p\)`, the true propotion of baseball fans. 
+
+--
+
+Think of the 1001 adults as the random sample `\(Y_{1},Y_{2},\dots,Y_{1001}\sim iid\ Bernoulli(p)\)`. 
+
+- `\(\hat{\theta}=\hat{p}=\frac{1}{n}\sum_{i=1}^{1001}Y_{i}=0.51\)`
+
+- `\(Var(Y)=p(1-p)\implies Var(\hat{p})=\frac{p(1-p)}{n}=🤔\)`
+
+--
+
+Putting this together, a large-sample `\(100(1-\alpha)\%\)` confidence interval for `\(p\)` is `$$\hat{p}\pm z_{\alpha/2}\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}$$`
+
+---
+
+# Interpreting Frequentist Interval Estimates
+
+Be *very careful* when interpreting confidence intervals! There are some *tempting* interpretations that are wrong:
+
+**Wrong**
+
+&gt; There is a probability of 0.90 that the true average shopping time `\(\mu\)` per customer is between 28.36 mins and 31.65 mins. 
+
+--
+
+- `\(\mu\)` is either in *this* interval, or it isn't!
+
+- In order to calculate the **probability** that `\(\mu\)` lies in **this interval** *(28.36, 31.65)*, we need to first assign a *prior* distribution to `\(\mu\)`, and then use the resulting *posterior distribution*. 
+
+--
+
+**Correct** 
+
+&gt; We are *90% confident* that thr true average shopping time `\(\mu\)` per customer is between 28.36 mins and 31.65 mins. 
+
+- In this context, we are using the phrase "*90% confident*", rather than "*90% probability*". 
+
+---
+
+# Interpreting Frequentist Interval Estimates
+
+We *can* attribute **probabilistic** interpretations to the *unobserved* endpoints, `$$(\hat{\theta}-z_{\alpha/2}\sigma_{\hat{\theta}}, \hat{\theta}+z_{\alpha/2}\sigma_{\hat{\theta}})$$`
+
+- Before these are *observed*, they are **random variables** and functions of `\(Y_{1},\dots,Y_{n}\)`.
+
+--
+
+&gt; If the *same procedure* were used many times on different random samples `\(Y_{1},\dots,Y_{n}\)`, then approximately `\(100(1-\alpha)\%\)` of the resulting intervals will contain `\(\theta\)`. 
+
+.center[
+&lt;img src="03-Intervals_Freq_files/figure-html/unnamed-chunk-12-1.png" width="40%" /&gt;
+]
+
+---
+
+# Simulation Check
+
+
+```r
+p = 0.5
+n = 1000
+
+# Construct 95% CI
+# and check whether it contains p = 0.5
+coverage = replicate(10000, {
+  # Collect sample
+  sample_data = sample(0:1, size = n, replace = TRUE)
+  p_hat = mean(sample_data)
+
+  # Calculate CI
+  theta_L = p_hat - 1.96*sqrt(p_hat*(1-p_hat)/n)
+  theta_U = p_hat + 1.96*sqrt(p_hat*(1-p_hat)/n)
+  
+  # Check coverage
+  (theta_L &lt;= 0.5) &amp; (theta_U &gt;= 0.5)
+})
+mean(coverage)
+```
+
+```
+## [1] 0.9467
+```
+
+---
+
+class: center, middle, frame
+
+# Small-Sample Confidence Intervals
+
+## (for means)
+
+---
+
+# Introduction
+
+In the **large-sample** CIs that we constructed previously, we assumed the following:
+
+.center[
+## The sample was sufficiently large!
+]
+
+- And we had *no restrictions* on the distribution of the sample data, `\(Y_{1},\dots,Y_{n}\)`. 
+
+--
+
+The confidence intervals (for μ) that we will discuss now *require* that the sample has been randomly selected from a **normal** population. 
+
+- In other words, we'll **assume** that `\(Y_{1},\dots,Y_{n}\sim iid\ N(\mu,\sigma^{2})\)`. 
+    - While we cannot truly *know* the true distribution of the `\(Y_{i}\)`, the following procedures will work well, *as long as departures from normality are not extreme*. 
+    
+--
+
+**Setting**
+
+- `\(Y_{1},\dots,Y_{n}\sim N(\mu,\sigma^{2})\)`
+- `\(\bar{Y}\)` is the *sample mean*, and `\(S^{2}\)` is the *sample variance*. 
+
+---
+
+# The t-distribution
+
+Suppose we are performing inference for `\(\mu\)` under the following scenario:
+
+- `\(Var(Y_{i})=\sigma^{2}\)` is *unknown*. 
+
+- The sample size is **small**, so we can't use the *large-sample* techniques discussed previously. 
+
+--
+
+**Recall**: If `\(Y_{1},\dots,Y_{n}\sim N(\mu,\sigma^{2})\)`, then `$$T=\frac{\bar{Y}-\mu}{S/\sqrt{n}}\sim t(n-1).$$`
+
+Notice that:
+
+- `\(T\)` is a function of *only* the **sample measurements** and the **unknown parameter**, `\(\mu\)`. 
+
+- The distribution of `\(T\)` *does not* depend on `\(\mu\)`. 
+
+Therefore, we can use `\(T\)` as a **pivotal quantity** in constructing a *confidence interval* for `\(\mu\)`. 
+
+---
+
+# A Small-Sample CI for μ
+
+Using `\(T\)` as a pivotal quantity, a (small-sample) `\(100(1-\alpha)\%\)` CI for `\(\mu\)` is `$$\bar{Y}\pm t_{\alpha/2}\left(\frac{S}{\sqrt{n}}\right)$$`
+
+- Note that `\(t_{\alpha/2}\)` also depends on the **degrees of freedom**, `\(n-1\)`. 
+
+--
+
+This CI is also valid for *large samples*. 
+
+- But what happens to the *t*-distribution for **large** `\(n\)`?
+
+--
+
+`$$P(-t_{\alpha/2}\leq T\leq t_{\alpha/2})\approx P(-z_{\alpha/2}\leq Z\leq z_{\alpha/2})=1-\alpha$$`
+
+
+```r
+qnorm(0.975)
+```
+
+```
+## [1] 1.959964
+```
+
+
+```r
+qt(0.975, df = c(5, 50, 500))
+```
+
+```
+## [1] 2.570582 2.008559 1.964720
+```
+
+
+---
+
+# Student's t vs. Normal
+
+.center[
+![](03-Intervals_Freq_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# Student's t vs. Normal
+
+.center[
+![](03-Intervals_Freq_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# Student's t vs. Normal
+
+.center[
+![](03-Intervals_Freq_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# The Stroop Test
+
+The **Stroop Effect** describes the psychological phenomenon that occurs when the processing of one particular stimulus feature interferes with the simultaneous processing of a second stimulus feature. 
+
+.center[
+&lt;img src="stroop.png" width="175" /&gt;
+]
+
+- Take the **Stroop Test** [here](https://faculty.washington.edu/chudler/java/ready.html)!
+
+--
+
+A random sample of `\(n=8\)` study participants yielded the following *reaction times* (in seconds per hundred reactions):
+
+- 95, 99, 106, 107, 107, 114, 120, 127
+
+Based on prior studies, it is reasonable to assume that reaction times are *normally distributed*. 
+
+&gt; Construct a 95% CI for `\(\mu\)`, the population mean reaction time for the Stroop Test. 
+
+---
+
+# The Stroop Test
+
+First, we need to calculate some **stats**:
+
+
+```r
+stroop = c(95, 99, 106, 107, 107, 114, 120, 127)
+mean(stroop) # Y_bar
+```
+
+```
+## [1] 109.375
+```
+
+```r
+sd(stroop) # S
+```
+
+```
+## [1] 10.56865
+```
+
+--
+
+⭐ How does this interval change if we use *large-sample * methods?
+
+--
+
+- We're really just changing `\(t_{\alpha/2}\)` to `\(z_{\alpha/2}\)`:
+    
+    ```r
+    c(qt(0.975, df = 7), qnorm(0.975))
+    ```
+    
+    ```
+    ## [1] 2.364624 1.959964
+    ```
+
+---
+
+# A CI for μ&lt;sub&gt;1&lt;/sub&gt; - μ&lt;sub&gt;2&lt;/sub&gt;
+
+Suppose that we are interested in *comparing* the means of **two** normal populations:
+
+- **Population 1**: Mean `\(\mu_{1}\)` and variance `\(\sigma_{1}^{2}\)`
+
+- **Population 2**: Mean `\(\mu_{2}\)` and variance `\(\sigma_{2}^{2}\)`
+
+We can construct a CI for `\(\mu_{1}-\mu_{2}\)` based on the *t*-distribution by making two additional assumptions:
+
+- The two *samples* are independent from one another.
+
+- The two *populations* have a common but *unknown* variance, `\(\sigma_{1}^{2}=\sigma_{2}^{2}=\sigma^{2}\)`. 
+
+---
+
+# A CI for μ&lt;sub&gt;1&lt;/sub&gt; - μ&lt;sub&gt;2&lt;/sub&gt;
+
+If `\(Y_{11},\dots,Y_{1n_{1}}\sim N(\mu_{1},\sigma^{2})\)` and `\(Y_{21},\dots,Y_{2n_{2}}\sim N(\mu_{2},\sigma^{2})\)`,
+
+- `\(Var(\bar{Y}_{1}-\bar{Y}_{2})=\frac{\sigma_{1}^{2}}{n_{1}}+\frac{\sigma_{2}^{2}}{n_{2}}=\sigma^{2}\left(\frac{1}{n_{1}}+\frac{1}{n_{2}}\right)\)`
+
+- `\(Z=\frac{(\bar{Y}_{1}-\bar{Y}_{2})-(\mu_{1}-\mu_{2})}{\sigma\sqrt{\frac{1}{n_{1}}+\frac{1}{n_{2}}}}\sim N(0,1)\)`
+
+🤔 But `\(\sigma^{2}\)` is unknown! What do we do?
+
+--
+
+Use the **pooled variance estimator**, `\(S^{2}_{p}\)`: `$$S_{p}^{2}=\frac{(n_{1}-1)S_{1}^{2}+(n_{2}-1)S_{2}^{2}}{n_{1}+n_{2}-2}$$`
+
+---
+
+# The Pooled Variance Estimator
+
+`$$S_{p}^{2}=\frac{(n_{1}-1)S_{1}^{2}+(n_{2}-1)S_{2}^{2}}{n_{1}+n_{2}-2}$$`
+
+We can think of the *pooled variance estimator*, `\(S_{p}^{2}\)` as the **weighted average** of `\(S_{1}^{2}\)` and `\(S_{2}^{2}\)`. 
+
+- If `\(n_{1}=n_{2}\)`, then `\(S_{p}^{2}\)` is simply the *average* of `\(S_{1}^{2}\)` and `\(S_{2}^{2}\)`. 
+
+- If `\(n_{1}\neq n_{2}\)`, then `\(S_{p}^{2}\)` gives *larger weight* to the sample variance associated with the *larger sample size*. 
+
+--
+
+Further, `$$W=\frac{(n_{1}+n_{2}-2)S_{p}^{2}}{\sigma^{2}}\sim \chi^{2}(df = n_{1}+n_{2}-2),$$` 
+
+so `$$T=\frac{Z}{\sqrt{W/df}}\sim t(df= n_{1}+_{2}-2)$$`
+
+---
+
+# A CI for μ&lt;sub&gt;1&lt;/sub&gt; - μ&lt;sub&gt;2&lt;/sub&gt;
+
+Because `$$T=\frac{Z}{\sqrt{W/df}}=\frac{(\bar{Y}_{1}-\bar{Y}_{2})-(\mu_{1}-\mu_{2})}{S_{p}\sqrt{\frac{1}{n_{1}}+\frac{1}{n_{2}}}}$$` is a **pivotal quantity**, we can use it to derive a *confidence interval* for `\(\mu_{1}-\mu_{2}\)`. 
+
+--
+
+&lt;br&gt;
+
+A `\((1-\alpha)\times100\%\)` **confidence interval** for `\(\mu_{1}-\mu_{2}\)` is `$$(\bar{Y}_{1}-\bar{Y}_{2})\pm t_{\alpha/2}S_{p}\sqrt{\frac{1}{n_{1}}+\frac{1}{n_{2}}},$$` where `\(t_{\alpha/2}\)` is determined from the *t*-distribution with `\(df=n_{1}+n_{2}-2\)`. 
+
+---
+
+# Piéchart Emporium's Rival
+
+Piéchart Emporium's rival on the other side of town is *Bärchart Marketplace*. 
+
+.center[
+&lt;img src="piechart_emporium.png" width="258" /&gt;
+]
+
+.center[
+&lt;img src="barchart_marketplace.png" width="356" /&gt;
+]
+
+**Goal** 👇👇👇
+
+&gt; Construct a 95% confidence interval for `\(\mu_{1}-\mu_{2}\)`, the *difference* in average daily revenue (in USD) between Piéchart Emporium and Bärchart Marketplace.
+
+---
+
+# Piéchart Emporium's Rival
+
+**Goal** 👇👇👇
+
+&gt; Construct a 95% confidence interval for `\(\mu_{1}-\mu_{2}\)`, the *difference* in average daily revenue (in USD) between Piéchart Emporium and Bärchart Marketplace.
+
+.pull-left[
+**Piéchart Emporium**😨
+
+- `\(n_{p}=10\)` days
+    - `\(\bar{y}_{p}=875\)` dollars
+    - `\(s_{p}=80\)` dollars
+]
+
+.pull-right[
+**Bärchart Marketplace**📊
+
+- `\(n_{b}=10\)` days
+    - `\(\bar{y}_{b}=960\)` dollars
+    - `\(s_{p}=90\)` dollars
+]
+
+---
+
+class: center, middle, frame
+
+# Confidence Intervals for the Variance
+
+---
+
+# Introduction
+
+The population **variance**, `\(\sigma^{2}\)` quantifies the amount of *variability* in the population. 
+
+- While `\(\sigma^{2}\)` is often *unknown*, we've shown that `$$S^{2}=\frac{1}{n-1}\sum_{i=1}^{n}(Y_{i}-\bar{Y})^{2}$$` is an **unbiased estimator** for `\(\sigma^{2}\)`. 
+
+--
+
+&lt;br&gt;
+
+We've used `\(S^{2}\)` in the construction of confidence intervals for `\(\mu\)` and `\(\mu_{1}-\mu_{2}\)`, but now let's use it in the construction of confidence intervals for `\(\sigma^{2}\)`. 
+
+**Want**: `\(P(\chi^{2}_{L}\leq\sigma^{2}\leq\chi^{2}_{U})=1-\alpha\)`
+
+**Need**: A **pivotal quantity**!
+
+---
+
+# Sample Variance Sampling Distribution
+
+**Setting**: `\(Y_{1},Y_{2},\dots,Y_{n}\sim N(\mu,\sigma^{2})\)`, where both `\(\mu\)` and `\(\sigma^{2}\)` are *unknown*. 
+
+- Earlier in the semester, we discussed that, when *scaled appropriately*, `\(S^{2}\)` follows a `\(\chi^{2}(n-1)\)` distribution. That is, `$$\frac{(n-1)S^{2}}{\sigma^{2}}=\frac{1}{\sigma^{2}}\sum_{i=1}^{n}(Y_{i}-\bar{Y})^{2}\sim \chi^{2}(n-1).$$`
+
+- This is a *pivotal quantity*! It's a function of the *data* and `\(\sigma^{2}\)`, and its distribution does *not* depend on `\(\sigma^{2}\)`. 
+
+--
+
+Therefore, we can derive a `\((1-\alpha)\times100\%\)` **confidence interval** for `\(\sigma^{2}\)` via: `$$P\left(\chi^{2}_{L}\leq\frac{(n-1)S^{2}}{\sigma^{2}}\leq\chi^{2}_{U}\right)=1-\alpha$$`
+
+---
+
+# A CI for &lt;sup&gt;2&lt;/sup&gt;
+
+For `\(\chi^{2}_{L}\)` and `\(\chi^{2}_{U}\)`, we choose points that cut off *equal tail areas*. 
+
+- That is, `\(\chi^{2}_{L}=\chi^{2}_{\alpha/2}\)` and `\(\chi^{2}_{U}=\chi^{2}_{1-(\alpha/2)}\)`. 
+
+&lt;img src="03-Intervals_Freq_files/figure-html/unnamed-chunk-24-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+--
+
+A `\((1-\alpha)\times100\%\)` **confidence interval** for `\(\sigma^{2}\)` is given by `$$\left(\frac{(n-1)S^{2}}{\chi^{2}_{\alpha/2}}, \frac{(n-1)S^{2}}{\chi^{2}_{1-(\alpha/2)}}\right)$$`
+
+---
+
+# Truck Noise
+
+(WMS 8.95)
+
+The EPA has set a maximum noise level for heavy trucks at 83 decibels (dB). The manner in
+which this limit is applied will greatly affect the trucking industry and the public. One way to
+apply the limit is to require all trucks to conform to the noise limit.
+
+A second but less satisfactory
+method is to require the truck fleet’s mean noise level to be less than the limit. If the latter rule
+is adopted, variation in the noise level from truck to truck becomes important because a large
+value of `\(\sigma^{2}\)` would imply that many trucks exceed the limit, even if the mean fleet level were
+83 dB. A random sample of six heavy trucks produced the following noise levels (in decibels): `$$85.4\quad 86.8\quad 86.1\quad 85.3\quad 84.8\quad 86.0$$`
+
+&gt; Use these data to construct a 90% confidence interval for `\(\sigma^{2}\)`, the variance of the truck noise emission readings. Interpret your results. 
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"countIncrementalSlides": false,
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+<script>
+(function() {
+  var divHTML = document.querySelectorAll(".details-open");
+  divHTML.forEach(function (el) {
+    var preNodes = el.getElementsByTagName("pre");
+    var outputNode = preNodes[1];
+    outputNode.outerHTML = "<details open class='output'><summary>Output</summary>" + outputNode.outerHTML + "</details>";
+  })
+})();
+(function() {
+  var divHTML = document.querySelectorAll(".details");
+  divHTML.forEach(function (el) {
+    var preNodes = el.getElementsByTagName("pre");
+    var outputNode = preNodes[1];
+    outputNode.outerHTML = "<details class='output'><summary>Output</summary>" + outputNode.outerHTML + "</details>";
+  })
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
