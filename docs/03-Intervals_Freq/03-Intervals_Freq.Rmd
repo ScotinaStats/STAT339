@@ -47,7 +47,7 @@ theme_set(theme_minimal() +
 ```
 
 <!--
-pagedown::chrome_print("~/Dropbox/Teaching/03-Simmons Courses/STAT338-Probability Theory/Slides/06-Functions_RVs/06-Functions_RVs.html")
+pagedown::chrome_print("~/Dropbox/Teaching/03-Simmons Courses/STAT339-Statistical Theory/Slides/03-Intervals_Freq/03-Intervals_Freq.html")
 -->
 
 class: center, middle, frame
@@ -869,7 +869,7 @@ Therefore, we can derive a $(1-\alpha)\times100\%$ **confidence interval** for $
 
 ---
 
-# A CI for <sup>2</sup>
+# A CI for σ<sup>2</sup>
 
 For $\chi^{2}_{L}$ and $\chi^{2}_{U}$, we choose points that cut off *equal tail areas*. 
 
