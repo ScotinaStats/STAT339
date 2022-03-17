@@ -897,7 +897,7 @@ ggplot(data = data.frame(x = c(0, 15)), aes(x)) +
 
 --
 
-A $(1-\alpha)\times100\%$ **confidence interval** for $\sigma^{2}$ is given by $$\left(\frac{(n-1)S^{2}}{\chi^{2}_{\alpha/2}}, \frac{(n-1)S^{2}}{\chi^{2}_{1-(\alpha/2)}}\right)$$
+A $(1-\alpha)\times100\%$ **confidence interval** for $\sigma^{2}$ is given by $$\left(\frac{(n-1)S^{2}}{\chi^{2}_{1-(\alpha/2)}}, \frac{(n-1)S^{2}}{\chi^{2}_{\alpha/2}}\right)$$
 
 ---
 
