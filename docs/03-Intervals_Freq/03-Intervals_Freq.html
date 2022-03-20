@@ -379,7 +379,7 @@ mean(coverage)
 ```
 
 ```
-## [1] 0.9469
+## [1] 0.9464
 ```
 
 ---
@@ -408,8 +408,6 @@ The confidence intervals (for μ) that we will discuss now *require* that the sa
 
 - In other words, we'll **assume** that `\(Y_{1},\dots,Y_{n}\sim iid\ N(\mu,\sigma^{2})\)`. 
     - While we cannot truly *know* the true distribution of the `\(Y_{i}\)`, the following procedures will work well, *as long as departures from normality are not extreme*. 
-    
---
 
 **Setting**
 
@@ -452,8 +450,6 @@ This CI is also valid for *large samples*.
 
 - But what happens to the *t*-distribution for **large** `\(n\)`?
 
---
-
 `$$P(-t_{\alpha/2}\leq T\leq t_{\alpha/2})\approx P(-z_{\alpha/2}\leq Z\leq z_{\alpha/2})=1-\alpha$$`
 
 
@@ -493,14 +489,6 @@ qt(0.975, df = c(5, 50, 500))
 
 ---
 
-# Student's t vs. Normal
-
-.center[
-![](03-Intervals_Freq_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
-]
-
----
-
 # The Stroop Test
 
 The **Stroop Effect** describes the psychological phenomenon that occurs when the processing of one particular stimulus feature interferes with the simultaneous processing of a second stimulus feature. 
@@ -510,8 +498,6 @@ The **Stroop Effect** describes the psychological phenomenon that occurs when th
 ]
 
 - Take the **Stroop Test** [here](https://faculty.washington.edu/chudler/java/ready.html)!
-
---
 
 A random sample of `\(n=8\)` study participants yielded the following *reaction times* (in seconds per hundred reactions):
 
@@ -548,8 +534,6 @@ sd(stroop) # S
 --
 
 ⭐ How does this interval change if we use *large-sample * methods?
-
---
 
 - We're really just changing `\(t_{\alpha/2}\)` to `\(z_{\alpha/2}\)`:
     
@@ -607,17 +591,13 @@ We can think of the *pooled variance estimator*, `\(S_{p}^{2}\)` as the **weight
 
 --
 
-Further, `$$W=\frac{(n_{1}+n_{2}-2)S_{p}^{2}}{\sigma^{2}}\sim \chi^{2}(df = n_{1}+n_{2}-2),$$` 
-
-so `$$T=\frac{Z}{\sqrt{W/df}}\sim t(df= n_{1}+_{2}-2)$$`
+Further, `$$W=\frac{(n_{1}+n_{2}-2)S_{p}^{2}}{\sigma^{2}}\sim \chi^{2}(df = n_{1}+n_{2}-2).$$` 
 
 ---
 
 # A CI for μ&lt;sub&gt;1&lt;/sub&gt; - μ&lt;sub&gt;2&lt;/sub&gt;
 
-Because `$$T=\frac{Z}{\sqrt{W/df}}=\frac{(\bar{Y}_{1}-\bar{Y}_{2})-(\mu_{1}-\mu_{2})}{S_{p}\sqrt{\frac{1}{n_{1}}+\frac{1}{n_{2}}}}$$` is a **pivotal quantity**, we can use it to derive a *confidence interval* for `\(\mu_{1}-\mu_{2}\)`. 
-
---
+Because `$$T=\frac{Z}{\sqrt{W/(n_{1}+n_{2}-2)}}=\frac{(\bar{Y}_{1}-\bar{Y}_{2})-(\mu_{1}-\mu_{2})}{S_{p}\sqrt{\frac{1}{n_{1}}+\frac{1}{n_{2}}}}\sim t(n_{1}+n_{2}-2)$$` is a **pivotal quantity**, we can use it to derive a *confidence interval* for `\(\mu_{1}-\mu_{2}\)`. 
 
 &lt;br&gt;
 
@@ -679,8 +659,6 @@ The population **variance**, `\(\sigma^{2}\)` quantifies the amount of *variabil
 
 - While `\(\sigma^{2}\)` is often *unknown*, we've shown that `$$S^{2}=\frac{1}{n-1}\sum_{i=1}^{n}(Y_{i}-\bar{Y})^{2}$$` is an **unbiased estimator** for `\(\sigma^{2}\)`. 
 
---
-
 &lt;br&gt;
 
 We've used `\(S^{2}\)` in the construction of confidence intervals for `\(\mu\)` and `\(\mu_{1}-\mu_{2}\)`, but now let's use it in the construction of confidence intervals for `\(\sigma^{2}\)`. 
@@ -711,7 +689,7 @@ For `\(\chi^{2}_{L}\)` and `\(\chi^{2}_{U}\)`, we choose points that cut off *eq
 
 - That is, `\(\chi^{2}_{L}=\chi^{2}_{\alpha/2}\)` and `\(\chi^{2}_{U}=\chi^{2}_{1-(\alpha/2)}\)`. 
 
-&lt;img src="03-Intervals_Freq_files/figure-html/unnamed-chunk-24-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="03-Intervals_Freq_files/figure-html/unnamed-chunk-23-1.png" width="50%" style="display: block; margin: auto;" /&gt;
 
 --
 
