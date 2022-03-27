@@ -48,7 +48,7 @@ theme_set(theme_minimal() +
 ```
 
 <!--
-pagedown::chrome_print("~/Dropbox/Teaching/03-Simmons Courses/STAT338-Probability Theory/Slides/06-Functions_RVs/06-Functions_RVs.html")
+pagedown::chrome_print("C:/Users/scotina/Dropbox/Teaching/03-Simmons Courses/STAT339-Statistical Theory/Slides/04-Intervals_Bayes/04-Intervals_Bayes.html")
 -->
 
 class: center, middle, frame
@@ -226,7 +226,7 @@ Bayesians and frequentists also interpret probabilities differently, so it is im
 
 [*Moose pic to fill space* 👇]
 
-```{r, echo = FALSE, out.width = "50%"}
+```{r, echo = FALSE, out.width = "30%"}
 knitr::include_graphics("moose.jpeg")
 ```
 
