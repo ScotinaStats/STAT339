@@ -1,0 +1,476 @@
+---
+title: "STAT 339: Statistical Theory"
+subtitle: "Bayesian Interval Estimation"
+author: "Anthony Scotina"
+date: 
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["my-theme.css", "my-fonts.css"]
+    nature:
+      countIncrementalSlides: false
+      highlightLines: true
+    includes:
+      after_body: "collapseoutput.js"
+---
+
+```{r xaringan-themer, include = FALSE}
+library(xaringanthemer)
+library(xaringanExtra)
+
+mono_accent(base_color = "#5E5E5E") #3E8A83?
+options(htmltools.preserve.raw = FALSE)
+
+# collapseoutput.js from https://gist.github.com/emitanaka/eaa258bb8471c041797ff377704c8505#file-collapseoutput-js
+```
+
+```{r xaringan-panelset, echo=FALSE}
+xaringanExtra::use_panelset()
+```
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE, warning = FALSE
+)
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+library(mosaic)
+library(bayesrules)
+
+theme_set(theme_minimal() +
+  theme(axis.title.x = element_text(size = 14, face = "bold"), 
+        axis.title.y = element_text(size = 14, face = "bold"),
+        axis.text.x = element_text(size = 12, face = "bold"), 
+        axis.text.y = element_text(size = 12, face = "bold"), 
+        plot.title = element_text(size = 16, face = "bold")))
+```
+
+<!--
+pagedown::chrome_print("~/Dropbox/Teaching/03-Simmons Courses/STAT338-Probability Theory/Slides/06-Functions_RVs/06-Functions_RVs.html")
+-->
+
+class: center, middle, frame
+
+# Bayesian Credible Intervals
+
+---
+
+# Interval Estimates (Recap)
+
+**Frequentist Interval Estimation**
+
+> A $(1-\alpha)\times100\%$ **confidence interval** is an interval $[\hat{\theta}_{L}, \hat{\theta}_{U}]$ such that $$P(\hat{\theta}_{L}\leq\theta\leq\hat{\theta}_{U})=1-\alpha,$$ where $1-\alpha$ is the **confidence coefficient**. 
+
+<br>
+
+- $[\hat{\theta}_{L}, \hat{\theta}_{U}]\longrightarrow$ **random** interval
+
+- $\theta\longrightarrow$ **fixed**
+
+<br>
+
+Because $\theta$ is **fixed**, we do NOT interpret this interval as "the probability that $\theta$ is in the interval. 
+
+---
+
+# Interval Estimates (Recap)
+
+**Bayesian Interval Estimation**
+
+The parameter $\theta$ is *random variable* with a:
+
+- **prior** distribution that reflects our prior beliefs about the variability of $\theta$
+
+- **posterior** distribution, $\theta\mid\mathbf{y}$, that reflects our *updated* understanding of $\theta$ after observing *data*. 
+
+--
+
+Suppose $\theta$ has a posterior distribution $\theta\mid\mathbf{y}$ with posterior pdf $f(\theta\mid\mathbf{y})$. Then the probability that $\theta$ is in the interval $(a,b)$ (given the *observed data*) is $$P(a\leq\theta\leq b\mid\mathbf{y})=\int_{a}^{b}f(\theta\mid \mathbf{y})\, d\theta.$$
+
+--
+
+If $P(a\leq\theta\leq b\mid\mathbf{y})=0.95$, then we say that $(a,b)$ is a 95% **credible interval** for $\theta$. 
+
+---
+
+# Animal Crossing!
+
+Suppose a group of college students are interested in starting an *Animal Crossing* club. 
+
+- In order to estimate demand, the students want to provide an *interval estimate* for $\theta$, the **proportion of students who play Animal Crossing**. 
+
+.pull-left[
+```{r, echo = FALSE, dpi = 250}
+knitr::include_graphics("ac_laugh.png")
+```
+]
+
+--
+
+.pull-right[
+From a few weeks ago: 
+
+- **Prior**: $\theta\sim Beta(10, 40)$ 
+
+- **Data**: $Y\mid\theta\sim Binomial(30, \theta)$, where we observe $Y=12$
+
+- **Posterior**: $\theta\mid Y\sim Beta(22, 58)$
+]
+
+---
+
+# Bayesian Credible Interval
+
+Using the posterior $\theta\mid Y$, we can find a **95% credible interval** by finding the 2.5th and 97.5th **posterior percentiles**. 
+
+- These mark the *middle 95% of posterior plausible values* for $\theta$. 
+
+```{r, warning = FALSE, echo = FALSE, fig.align='center', dpi = 300, fig.height = 4, fig.width = 6, out.width = "60%"}
+#plot_beta(22, 58) + 
+ggplot(data = data.frame(x = c(0, 1)), aes(x)) +
+  stat_function(fun = dbeta, 
+                args = list(shape1 = 22, shape2 = 58)) +
+  stat_function(fun = dbeta, 
+                args = list(shape1 = 22, shape2 = 58),
+                xlim = c(0.183455, 0.3771967),
+                geom = "area", 
+                fill = "dodgerblue") +
+  labs(x = expression(theta), 
+       y = expression(paste("f(", theta, " | y)")),
+       title = expression(paste(theta, " | Y ~ Beta(22, 58)"))) 
+```
+
+--
+
+```{r}
+c(qbeta(0.025, 22, 58), qbeta(0.975, 22, 58))
+```
+
+---
+
+# Bayesian Credible Interval
+
+```{r}
+c(qbeta(0.025, 22, 58), qbeta(0.975, 22, 58))
+```
+
+There is a **95% posterior probability** that somewhere between 18.3% and 37.7% of college students play Animal Crossing. 
+
+- Posterior mean: $22/(22+58)=0.275\rightarrow$ 27.5%
+
+--
+
+**Another way to think about this**:
+
+\begin{align*}
+P(0.183\leq \theta\leq 0.377\mid Y=12)&=\int_{0.183}^{0.377}f(\theta\mid y=12)\,d\theta\\
+&=\int_{0.183}^{0.377}\frac{\Gamma(22+58)}{\Gamma(22)\Gamma(58)}\theta^{22-1}(1-\theta)^{58-1}\,d\theta\\
+&=0.95
+\end{align*}
+
+--
+
+**Note**: If we want to find, say, a **90% credible interval**, we just mark the *middle 90%* of the posterior distribution instead!
+
+---
+
+# Comparison to Frequentist CI for *p*
+
+Recall that a 95% **confidence interval** for $p$ is given by $$\hat{p}\pm 1.96\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}.$$
+
+*In our example*...
+
+- $\hat{p}=12/30=0.4$
+- $n=30$
+
+--
+
+**95% Confidence Interval**: $(0.225, 0.575)$
+
+**95% Credible Interval**: $(0.183, 0.377)$
+
+- **Why so different?** 🤔
+
+--
+
+It has to do with our choice of **prior**!
+
+- (Not to mention these intervals actually have *very* different meanings!)
+
+---
+
+# Interpreting Credible Intervals
+
+Unlike with *frequentist* **confidence intervals**, the *Bayesian* setup allows us to say that $\theta$ *is inside* $(0.183, 0.377)$ with some probability, **not 0 or 1**. 
+
+- Under the Bayesian framework, $\theta$ is a **random variable** with a **probability distribution**. 
+
+--
+
+The 95% confidence interval of $(0.225, 0.575)$ is just one of the possible *realized values* of the *random interval* $$\left(\hat{p}-1.96\sqrt{\hat{p}(1-\hat{p})}{n}, \hat{p}+1.96\sqrt{\hat{p}(1-\hat{p})}{n}\right)$$
+
+- Under the frequentist framework, $\theta$ **does not move**! It is *fixed* and is inside $(0.225, 0.575)$ with probability **either 0 or 1**. 
+
+---
+
+# Bayesian Probability
+
+Bayesians and frequentists also interpret probabilities differently, so it is important not to confuse **credible** (Bayesian) and **coverage** (frequentist) probability!
+
+- **Credible** probability: Reflects the experimenter's *subjective beliefs*, which are expressed in the *prior* distribution and updated in the *posterior* distribution after observing **DATA**. 
+
+- **Coverage** probability: Represents a *long-run relative frequency* of identical trials; 95% of *realized* confidence intervals will cover $\theta$.
+
+
+[*Moose pic to fill space* 👇]
+
+```{r, echo = FALSE, out.width = "50%"}
+knitr::include_graphics("moose.jpeg")
+```
+
+---
+
+# Cool Beans (yes, that one.)
+
+Let $Y_{i}$, the number of people in front of you in line at [**Cool Beans**](https://www.holycross.edu/campus-life/dining/locations-menus-hours/cool-beans) on day $i$ be distributed according to a Poisson distribution with parameter $\lambda$: $$Y_{i}\mid\lambda\sim Poisson(\lambda)$$
+
+.pull-left[
+```{r, echo = FALSE}
+knitr::include_graphics("coolbeans.png")
+```
+]
+
+.pull-right[
+- **Prior**: $\lambda\sim Gamma(11, 1)$
+
+- **Data**: $n=5$ days; $\mathbf{y}=(15, 12, 5, 8, 10)$
+
+
+<br>
+
+**Find a 99% credible interval for $\lambda$. **
+]
+
+---
+
+# Gamma-Exponential Credible Interval
+
+Suppose we want to estimate the lifetime (in hours), $\theta$, of a certain electrical component. 
+
+Consider the following:
+
+- **Prior**: $\theta\sim Gamma(\alpha,\beta)$, where $$f(\theta)=\frac{\beta^{\alpha}}{\Gamma(\alpha)}\theta^{\alpha-1}e^{-\beta\theta}$$
+
+- **Likelihood**: $Y_{1},Y_{2},\dots,Y_{n}\mid\theta\sim Exponential(\theta)$, where $$f(y_{i}\mid\theta)=\theta e^{-\theta y_{i}}$$
+
+Construct a 90% credible interval for $\theta$ and the mean of the exponential population, $\mu=1/\theta$. 
+
+---
+
+class: center, middle, frame
+
+# Credible Intervals for the Mean
+
+---
+
+# The Normal-Normal Conjugacy
+
+**From Practice 5**:
+
+If:
+
+- **Prior**: $\mu\sim N(\theta,\tau^{2})$
+- **Data**: $Y_{i}\mid \mu\sim N(\mu,\sigma^{2})$ (μ is *unknown* but $\sigma^{2}$ is **known**)
+
+then the *posterior distribution* is also Normally distributed:
+
+$$
+\mu\mid\mathbf{y}\sim N\left(\theta\frac{\sigma^{2}}{n\tau^{2}+\sigma^{2}}+\bar{y}\frac{n\tau^{2}}{n\tau^{2}+\sigma^{2}}, \frac{\tau^{2}\sigma^{2}}{n\tau^{2}+\sigma^{2}}\right)
+$$
+
+---
+
+# Credible Intervals for a Normal Mean
+
+Because $\mu\mid\mathbf{y}$ is **Normally** distributed (and hence, *symmetric*), we can use techniques similar to those used to derive *frequentist* CIs for a Normal mean!
+
+**Want**: $a$ and $b$ such that $$P(a\leq \mu\leq b\mid\mathbf{y})=1-\alpha$$
+
+**Know**: 
+
+- *Posterior Distribution*: **Normal**! 🔔
+
+- *Posterior Mean*: $\mu_{1}\equiv \theta\frac{\sigma^{2}}{n\tau^{2}+\sigma^{2}}+\bar{y}\frac{n\tau^{2}}{n\tau^{2}+\sigma^{2}}$
+
+- *Posterior Variance*: $\sigma_{1}^{2}\equiv \frac{\tau^{2}\sigma^{2}}{n\tau^{2}+\sigma^{2}}$
+
+--
+
+$\implies$ $P(\mu_{1}-z_{\alpha/2}\sigma_{1} < \mu < \mu_{1}+z_{\alpha/2}\sigma_{1}\mid\mathbf{y})=1-\alpha$
+
+---
+
+# Credible Intervals for a Normal Mean
+
+If:
+
+- **Prior**: $\mu\sim N(\theta,\tau^{2})$
+- **Data**: $Y_{1},Y_{2},\dots,Y_{n}\mid \mu\sim N(\mu,\sigma^{2})$
+    - $\mu$ is *unknown* and $\sigma^{2}$ is **known**
+    
+Then: A $(1-\alpha)\times100\%$ **Bayesian credible interval** for $\mu$ is $$\mu_{1}\pm z_{\alpha/2}\sigma_{1},$$ where $\mu_{1}$ is the **posterior mean** (and the *Bayes estimator*) and $\sigma_{1}^{2}$ is the **posterior variance**. 
+
+---
+
+# The Stroop Test
+
+The **Stroop Effect** describes the psychological phenomenon that occurs when the processing of one particular stimulus feature interferes with the simultaneous processing of a second stimulus feature. 
+
+.center[
+```{r, echo = FALSE, dpi = 300}
+knitr::include_graphics("stroop.png")
+```
+]
+
+--
+
+A random sample of $n=8$ study participants yielded the following *reaction times* (in seconds per hundred reactions):
+
+- 95, 99, 106, 107, 107, 114, 120, 127
+
+We'll assume $Y_{i}\mid \mu\sim N(\mu, 12^2)$
+
+Based on prior studies, it is reasonable to assume that reaction times are *normally distributed* **with mean 100 and standard deviation 15**. 
+
+> Construct a 95% Bayesian credible interval for $\mu$, the population mean reaction time for the Stroop Test. 
+
+---
+
+class: center, middle, frame
+
+# Large-Sample Credible Intervals
+
+---
+
+# Large-Sample Normal Approximation to the Posterior
+
+Suppose we have **data** $Y_{1},Y_{2},\dots,Y_{n}$ modeled from some (preferably named) distribution with parameter $\theta$. 
+
+- For example, in the **Animal Crossing** example, $Y\mid \theta\sim Binomial(n, \theta)$. 
+
+If $n$ is **large**, we can use the Normal distribution to approximate the posterior: $$\theta\mid \mathbf{y}\sim (approx)\ Normal\left(\hat{\theta}_{MLE}, \frac{1}{I(\hat{\theta}_{MLE})}\right).$$
+
+- $\hat{\theta}_{MLE}$ is the **MLE** for $\theta$ in the data model. 
+
+- $I(\hat{\theta}_{MLE})=\left.-\frac{d^{2}}{d\theta^{2}}\log L(\theta)\right|_{\theta=\hat{\theta}_{MLE}}$ is the **Fisher information**. 
+
+---
+
+# Large-Sample Approximation
+
+Suppose instead of surveying $n=30$ students regarding their Animal Crossing preferences, we survey $n=500$. 
+
+- $Y\mid\theta\sim Binomial(500, \theta)$
+
+- **Note**: Because we're using a large sample approximation, it doesn't *really* matter what prior we use. 
+    - Though this is just for illustration! If you use a conjugate prior, there's no reason to do this...
+    
+--
+
+**Binomial MLE**: $\hat{\theta}_{MLE}=Y/n$
+
+- For large $n$, $\theta\mid Y\sim (approx)\ Normal\left(\hat{\theta}_{MLE},\frac{1}{I(\hat{\theta}_{MLE})}\right)$. 
+
+---
+
+# Calculating Fisher Information
+
+We just need to find $I(\hat{\theta}_{MLE})=\left.-\frac{d^{2}}{d\theta^{2}}\log L(\theta)\right|_{\theta=\hat{\theta}_{MLE}}$
+
+--
+
+- $\log L(\theta)= \log\left[\binom{n}{y}\theta^{y}(1-\theta)^{n-y}\right]=\log\binom{n}{y}+y\log\theta + (n-y)\log(1-\theta)$
+
+- $\frac{d}{d\theta}\log L(\theta)=\frac{y}{\theta}+\frac{n-y}{1-\theta}\cdot (-1)$
+
+- $\frac{d^{2}}{d\theta^{2}}\log L(\theta)=(-1)\frac{y}{\theta^{2}}+(-1)\frac{n-y}{(1-\theta)^{2}}(-1)(-1)$
+
+$\implies$ $I(\hat{\theta}_{MLE})=\frac{y}{\hat{\theta}_{MLE}^{2}} + \frac{n-y}{(1-\hat{\theta}_{MLE})^{2}}$
+    
+---
+
+# Comparing Approximation to Exact
+
+Assuming...
+
+- $\theta\sim Beta(10, 40)$
+
+- $Y\mid \theta\sim Binomial(n=500, \theta)$ with observed $Y=100$
+
+Then the **exact** posterior is $\theta\mid Y\sim Beta(10+100, 40+500-100)=Beta(110, 440)$. 
+
+--
+
+Using the **large-sample Normal approximation**, $\theta\mid Y\sim (approx)\ N(0.2, 0.00032)$. 
+
+--
+
+.pull-left[
+```{r, warning = FALSE, echo = FALSE, fig.align='center', dpi = 300, fig.height = 4, fig.width = 6}
+plot_beta(110, 440) + 
+  labs(x = expression(theta), 
+       y = expression(paste("f(", theta, " | y)")), 
+       title = expression(paste(theta, " | Y ~ Beta(110, 440)")))
+```
+]
+
+.pull-right[
+```{r, warning = FALSE, echo = FALSE, fig.align='center', dpi = 300, fig.height = 4, fig.width = 6}
+plot_normal(0.2, sqrt(0.00032)) + 
+  xlim(0, 1) + 
+  labs(x = expression(theta), 
+       y = expression(paste("f(", theta, " | y)")), 
+       title = expression(paste(theta, " | Y ~ (approx) N(0.2, 0.00032)")))
+```
+]
+
+---
+
+# Small Samples
+
+This approximation doesn't work as well with small $n$. 😩😩😩
+
+Assuming...
+
+- $\theta\sim Beta(10, 40)$
+
+- $Y\mid \theta\sim Binomial(n=10, \theta)$ with observed $Y=2$
+
+Then the **exact** posterior is $\theta\mid Y\sim Beta(10+2, 40+10-2)=Beta(12, 48)$. 
+
+--
+
+Using the **large-sample Normal approximation**, $\theta\mid Y\sim (approx)\ N(0.2, 0.016)$. 
+
+.pull-left[
+```{r, warning = FALSE, echo = FALSE, fig.align='center', dpi = 300, fig.height = 4, fig.width = 6}
+plot_beta(12, 48) + 
+  labs(x = expression(theta), 
+       y = expression(paste("f(", theta, " | y)")), 
+       title = expression(paste(theta, " | Y ~ Beta(12, 48)")))
+```
+]
+
+.pull-right[
+```{r, warning = FALSE, echo = FALSE, fig.align='center', dpi = 300, fig.height = 4, fig.width = 6}
+plot_normal(0.2, sqrt(0.016)) + 
+  xlim(0, 1) + 
+  labs(x = expression(theta), 
+       y = expression(paste("f(", theta, " | y)")), 
+       title = expression(paste(theta, " | Y ~ (approx) N(0.2, 0.016)")))
+```
+]
+
+
