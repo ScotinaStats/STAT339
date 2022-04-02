@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>STAT 339: Statistical Theory</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Anthony Scotina" />
+    <script src="libs/header-attrs-2.13/header-attrs.js"></script>
+    <link href="libs/panelset-0.2.6/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset-0.2.6/panelset.js"></script>
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+    <link rel="stylesheet" href="my-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# STAT 339: Statistical Theory
+## Bootstap Interval Estimation
+### Anthony Scotina
+
+---
+
+
+
+
+
+
+
+
+
+
+&lt;!--
+pagedown::chrome_print("~/Dropbox/Teaching/03-Simmons Courses/STAT338-Probability Theory/Slides/06-Functions_RVs/06-Functions_RVs.html")
+--&gt;
+
+class: center, middle, frame
+
+# Bootstrap Sampling Distributions
+
+---
+
+# Comparing Approaches
+
+One of the *major goals* of statistical inference is to understand how **variability** in samples can affect estimation. 
+
+The two major approaches we've studied so far take different approaches to understanding **variability**. 
+
+--
+
+**1**. **Bayesian**
+
+- Focus was on the variability of the **parameter**, conditional on the data: `\(\theta\mid\mathbf{y}\)`
+
+.pull-left[
+[*Moose pic to fill space* 👇]
+
+&lt;img src="moose1.jpg" width="75%" /&gt;
+]
+
+.pull-right[
+[*Moose pic to fill space* 👇]
+
+&lt;img src="moose2.jpg" width="75%" /&gt;
+]
+
+---
+
+# Comparing Approaches
+
+One of the *major goals* of statistical inference is to understand how **variability** in samples can affect estimation. 
+
+The two major approaches we've studied so far take different approaches to understanding **variability**. 
+
+**2**. **Frequentist**
+
+- Focus was on the variability of the **statistic**/estimator of the *parameter*
+
+- If we know the distribution/population from which the data are sampled, `\(f(y\mid\theta)\)`, we can *simulate* samples from this distribution to see firsthand how they vary. 
+
+- If the population is **normal** and the statistics are "nice" (e.g., sample mean, variance, proportion), we can use sampling distribution theory with the `\(\chi^{2}\)` and `\(t\)` distributions. 
+
+- If the sample size `\(n\)` is large and we're using `\(\bar{Y}\)`, we can use the **Central Limit Theorem**
+
+---
+
+# Sampling with Replacement
+
+The *nonparametric* **bootstrap** involves randomly sampling data **with replacement** to form a "new" sample. 
+
+- This "new" sample is referred to as a **bootstrap sample**. 
+
+--
+
+In other words, if we observe `\(n\)` observations `\(\mathbf{y}=\{y_{1},\dots,y_{n}\}\)`, a **bootstrap sample** consists of the new set of observations `$$\mathbf{y}^{*}=(y_{1}^{*},\dots,y_{n}^{*}).$$` 
+
+- Each `\(y_{i}^{*}\)` is *independently* sampled from the original `\(\mathbf{y}\)` with *equal probability*: `$$P(y_{i}^{*}=y_{j})=\frac{1}{n},\ \text{for all}\ i,j$$`
+
+--
+
+
+```r
+set.seed(339) # Use for reproducibility!
+pet_names = c("Moose", "Cannoli", "Ralph", "Oscar", "Frank")
+sample(pet_names, size = 5, replace = TRUE)
+```
+
+```
+## [1] "Oscar"   "Ralph"   "Frank"   "Oscar"   "Cannoli"
+```
+
+---
+
+# Need for the Bootstrap
+
+**Example 1**: If `\(Y_{1},\dots,Y_{n}\sim iid\ N(\mu,\sigma^{2})\)`, then `$$\bar{Y}\sim N\left(\mu,\frac{\sigma^{2}}{n}\right)$$`
+
+**Example 2**: If `\(Y_{1},\dots,Y_{n}\sim iid\ F(\cdot)\)` (i.e., the distribution that generated the data is *unknown*), then `\(\text{median}(\mathbf{y})\sim\)` 🤷
+
+--
+
+For many statistics, there is no theoretical result for an **exact** sampling distribution, and *large-sample* approximations often require assumptions and knowledge that we just won't have with real data. 
+
+- The **bootstrap** can help us *approximate* **sampling distributions** of statistics in these situations!
+
+---
+
+# The Bootstrap Procedure
+
+**Setting**: We observe an *iid* sample `\(\mathbf{y}=\{y_{1},\dots,y_{n}\}\)` from some distribution `\(F(\cdot)\)`, where `\((\cdot)F\)` is not necessarily known. 
+
+- Suppose that `\(\theta\)` is our *parameter* of interest, and `\(\hat{\theta}=T(\mathbf{y})\)` is the statistic used to *estimate* `\(\theta\)`. 
+
+The **bootstrap** proceeds as follows:
+
+1. *Independently* sample `\(y_{i}^{*}\)` **with replacement** from `\(\{y_{1},\dots,y_{n}\}\)`, for `\(i=1,\dots,n\)`. 
+
+2. Calculate `\(\hat{\theta}^{*}=T(\mathbf{y}^{*})\)`, where `\(\mathbf{y}^{*}\)` is the set of `\(n\)` *resampled* observations. 
+
+3. Repeat steps 1 and 2 `\(B\)` times (usually 10,000) to form the **bootstrap distribution** of `\(\hat{\theta}\)`. 
+
+4. Run `beepr::beep(8)` with volume **ON**. 
+
+---
+
+
+
+# Bootstrapping
+
+A **bootstrap sample** is a sample taken from the **SAMPLE** **with replacement**. 
+
+- After an observation is randomly selected for inclusion in the bootstrap sample, it can be randomly selected *again*.
+
+[(Boehmke and Greenwell, 2020)](https://bradleyboehmke.github.io/HOML/)
+
+.center[
+&lt;img src="bootstrap.png" width="324" /&gt;
+]
+
+
+**Two Rules**:
+
+1. A **bootstrap sample** must be the *same size as the original sample*. 
+
+2. A **bootstrap sample** must contain only the observations that were included in the original sample. 
+
+---
+
+# Bootstrapping
+
+When using the bootstrap, it might help to think of our original sample *as if* it were the population. 
+
+- If the sample is *representative*, then the population might as well just be tons of copies of the original sample. 
+
+--
+
+**Example**:
+
+Meet some "data":
+.center[
+&lt;img src="ac_beau.jpeg" width="80" /&gt;&lt;img src="ac_diva.jpeg" width="80" /&gt;&lt;img src="ac_rod.jpeg" width="79" /&gt;&lt;img src="ac_pango.jpeg" width="81" /&gt;&lt;img src="ac_goose.jpeg" width="80" /&gt;&lt;img src="ac_dora.jpeg" width="79" /&gt;
+]
+
+---
+
+# How Bootstrapping Works
+
+**One Sample** `\(\implies\)` *One Sample Statistic*
+
+.center[
+&lt;img src="bootstrap1.png" width="280" /&gt;
+]
+
+---
+
+# How Bootstrapping Works
+
+**One Sample** `\(\implies\)` **Bootstrap Sample** `\(\implies\)` *Bootstrap Statistic*
+
+.center[
+&lt;img src="bootstrap2.png" width="548" /&gt;
+]
+
+---
+
+# How Bootstrapping Works
+
+**One Sample** `\(\implies\)` **Bootstrap Samples** `\(\implies\)` *Bootstrap Statistics*
+
+.center[
+&lt;img src="bootstrap3.png" width="540" /&gt;
+]
+
+---
+
+# How Bootstrapping Works
+
+**One Sample** `\(\implies\)` **Many Bootstrap Samples** `\(\implies\)` *Many Bootstrap Statistics*
+
+.center[
+&lt;img src="bootstrap4.png" width="541" /&gt;
+]
+
+---
+
+# Why Bootstrapping Works
+
+If the sample is **representative**, the *population* might as well be *many copies of the sample*. 
+
+.center[
+&lt;img src="bootstrap5.png" width="502" /&gt;
+]
+
+---
+
+# Why Bootstrapping Works
+
+If the sample is **representative**, the *population* might as well be *many copies of the sample*. 
+
+.center[
+&lt;img src="bootstrap6.png" width="616" /&gt;
+]
+
+---
+
+# Bootstrap Logic
+
+**Recall**: The **sampling distribution** of an estimator `\(\hat{\theta}\)` represents the distribution of values of `\(\hat{\theta}\)` that we would observe if we took *many samples* from a population. 
+
+The bootstrap treats the **observed** sample `\(\mathbf{y}=\{y_{1},\dots,y_{n}\}\)` as if it were the *true population*. 
+
+- Thus we're able to *approximate* the **sampling distribution** of `\(\hat{\theta}\)` by observing the distribution of values of `\(\hat{\theta}^{*}\)` obtained from many *bootstrap samples*. 
+
+--
+
+This relies *heavily* on our sample being a *solid representation* of the *true population*. 
+
+- Usually okay if `\(n\)` is **large**, but not as likely for small `\(n\)`. 
+
+---
+
+# Bootstrap Notation
+
+Let `\(\hat{\theta}^{*}_{b}\)` be the calculated *statistic* of interest from the *b*th bootstrap sample. The *mean* of our **bootstrap distribution** is: `$$\bar{\theta}^{*}=\frac{1}{B}\sum_{b=1}^{B}\hat{\theta}^{*}_{b},$$` and we estimate the **standard error** with `$$\hat{SE}_{B}^{*}=\sqrt{\frac{1}{B-1}\sum_{b=1}^{B}(\hat{\theta}^{*}_{b}-\bar{\theta}^{*})^{2}}$$`
+
+- **Note**: The bootstrap helps us approximate the **shape**, and **spread** of the *sampling distribution*, NOT the **center**. 
+    - The *bootstrap distribution* should be centered around `\(\hat{\theta}\)`, the statistic from our original sample. 
+
+---
+
+# Example (feat. Penguins)
+
+Let's try to estimate the **mean** *body mass* (in grams) of *Chinstrap penguins*, using a sample of `\(n=68\)` from Palmer Station in Antarctica.
+
+.pull-left[
+&lt;img src="chinstrap.jpeg" width="533" /&gt;
+]
+
+.pull-right[
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+chinstrap_mass = penguins %&gt;%
+  filter(species == "Chinstrap") %&gt;%
+  pull(body_mass_g)
+
+mean(chinstrap_mass)
+```
+
+```
+## [1] 3733.088
+```
+
+- The *sample mean* is **3733.088 grams**. But because this is just *one observed statistic*, we cannot immediately tell how much it might vary from sample-to-sample. 
+]
+
+---
+
+# Bootstrapping (feat. Penguins)
+
+**Bootstrap Sample #1**
+
+
+```r
+bs_samp1 = sample(chinstrap_mass, replace = TRUE, size = 68)
+mean(bs_samp1)
+```
+
+```
+## [1] 3658.824
+```
+
+--
+
+**Bootstrap Sample #2**
+
+
+```r
+bs_samp2 = sample(chinstrap_mass, replace = TRUE, size = 68)
+mean(bs_samp2)
+```
+
+```
+## [1] 3769.853
+```
+
+--
+
+**Bootstrap Sample #3**
+
+
+```r
+bs_samp3 = sample(chinstrap_mass, replace = TRUE, size = 68)
+mean(bs_samp3)
+```
+
+```
+## [1] 3715.809
+```
+
+---
+
+# Bootstrapping (feat. Penguins)
+
+Instead of obtaining each bootstrap sample/mean one-by-one, let's obtain an entire **bootstrap distribution**!
+
+
+```r
+set.seed(339)
+chinstrap_bootstrap_dist = replicate(10000, {
+  bs_samp = sample(chinstrap_mass, replace = TRUE, size = 68)
+  mean(bs_samp)
+})
+
+hist(chinstrap_bootstrap_dist)
+```
+
+&lt;img src="05-Intervals_Bootstrap_files/figure-html/unnamed-chunk-20-1.png" width="50%" /&gt;
+
+---
+
+# Bootstrapping (feat. Penguins)
+
+How might we estimate the **variability** between sample means?
+
+- We calculate the **standard deviation** of bootstrap statistics with the **bootstrap standard error**!
+
+
+```r
+sd(chinstrap_bootstrap_dist)
+```
+
+```
+## [1] 46.41767
+```
+
+---
+
+class: center, middle, frame
+
+# Bootstrap Confidence Intervals
+
+---
+
+# Bootstrap Recap
+
+**Bootstrap Resampling**
+
+1. For `\(b=1,\dots,B\)`:
+    - Draw a *bootstrap sample* of size `\(n\)` **with replacement** from the *observed data*. 
+    - Calculate the estimate `\(\hat{\theta}_{b}\)` based on that bootstrap sample. 
+    
+2. The **bootstrap distribution** of estimates `\(\{\hat{\theta}_{1},\dots,\hat{\theta}_{B}\}\)` approximates the *sampling distribution* of `\(\hat{\theta}\)`. 
+
+&lt;br&gt;
+
+🚨The bootstrap distribution does **NOT** reproduce the *mean* of the actual sampling distribution!
+
+- It *does* reproduce the **shape**, **variance**, and **bias** of the actual sampling distribution. 
+
+---
+
+# Bootstrap Percentile CIs
+
+If we have already constructed a **bootstrap distribution**, then one way to obtain a *confidence interval* using the bootstrap is fairly straightforward. 
+
+- The interval between the `\(\alpha/2\)` and `\(1-\alpha/2\)` quantiles of the bootstrap distribution forms a `\((1-\alpha)\times100\%\)` **bootstrap percentile confidence interval** for `\(\theta\)`: `$$[\hat{\theta}^{*}_{\alpha/2}, \hat{\theta}^{*}_{1-\alpha/2}]$$`
+
+--
+
+**Penguin Example**🐧
+
+- 95% Bootstrap Percentile CI for **mean body mass**
+
+
+```r
+quantile(chinstrap_bootstrap_dist, 
+         probs = c(0.025, 0.975))
+```
+
+```
+##     2.5%    97.5% 
+## 3642.647 3823.162
+```
+
+---
+
+# Bootstrap with Small Samples  
+
+The bootstrap distribution (and resulting *percentile confidence intervals*) tend to be too narrow when working with **small samples**.
+
+- Could result in **undercoverage**! 😨
+
+Let's estimate the mean `\(\mu\)` with a sample of `\(n=5\)` from a **Normal(339, 15&lt;sup&gt;2&lt;/sup&gt;)** population. 
+
+--
+
+**Bootstrap Percentile CI**
+
+
+```r
+set.seed(339) # Use for reproducibility
+
+norm_small_samp = rnorm(n = 5, mean = 339, sd = 15)
+
+norm_boot_dist = replicate(10000, {
+  boot_samp = sample(norm_small_samp, size = 5, replace = TRUE)
+  mean(boot_samp)
+})
+
+quantile(norm_boot_dist, 
+         probs = c(0.025, 0.975))
+```
+
+```
+##     2.5%    97.5% 
+## 313.1984 342.9548
+```
+
+---
+
+# Ordinary t-interval with Small Samples
+
+The bootstrap distribution (and resulting *percentile confidence intervals*) tend to be too narrow when working with **small samples**.
+
+- Could result in **undercoverage**! 😨
+
+Let's estimate the mean `\(\mu\)` with a sample of `\(n=5\)` from a **Normal(339, 15&lt;sup&gt;2&lt;/sup&gt;)** population. 
+
+**Ordinary t-interval**
+
+
+```r
+x_bar = mean(norm_small_samp)
+s = sd(norm_small_samp)
+t_star = qt(0.975, df = 4)
+
+c(x_bar - t_star*s/sqrt(5), 
+  x_bar + t_star*s/sqrt(5))
+```
+
+```
+## [1] 303.0674 353.7329
+```
+
+
+
+
+---
+
+# Bootstrap with Skewed Samples  
+
+One of the primary uses of bootstrap resampling is in scenarios where it is difficult (or impractical, depending on how the data are stored) to derive formulas. 
+
+- Another use is when assumptions for classical inference procedures are **not met**. 
+
+**Example**: Estimate the variance of a right-skewed population. 
+
+--
+
+First, let's import `\(n=23\)` Verizon repair times from [Hesterberg (2015)](https://www.tandfonline.com/doi/full/10.1080/00031305.2015.1089789?scroll=top&amp;needAccess=true)
+
+
+```r
+library(resample) # Install for access to 'Verizon' data!
+data("Verizon")
+CLEC = with(Verizon, Time[Group == "CLEC"])
+```
+
+---
+
+# Bootstrap with Skewed Samples 
+
+The *sample variance* is `\(s^{2}=380.4\)`
+
+
+```r
+var(CLEC)
+```
+
+```
+## [1] 380.3895
+```
+
+--
+
+First, let's construct a 95% CI using the **"classical", normal-based procedure**: `$$\left(\frac{(n-1)S^{2}}{\chi^{2}_{1-(\alpha/2)}}, \frac{(n-1)S^{2}}{\chi^{2}_{\alpha/2}}\right)$$`
+
+--
+
+We obtain a 95% CI of `\((227.5, 762.0)\)`. How does this compare to a **bootstrap CI**?
+
+---
+
+# Bootstrap with Skewed Samples 
+
+
+```r
+var_boot = replicate(10000, {
+  boot_samp = sample(CLEC, size = 23, replace = TRUE)
+  var(boot_samp)
+})
+quantile(var_boot,
+         probs = c(0.025, 0.975))
+```
+
+```
+##      2.5%     97.5% 
+##  58.93404 942.57310
+```
+
+This is...quite a bit different. But we had to make a *key assumption* with using the normal-based procedure:
+
+.center[
+**Our sample froms from a NORMAL population!**
+]
+
+--
+
+For distributions with *extreme skew* (i.e., long tails), the actual variance of `\(S^{2}\)` is much greater than fo Normal distributions. 
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"countIncrementalSlides": false,
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+<script>
+(function() {
+  var divHTML = document.querySelectorAll(".details-open");
+  divHTML.forEach(function (el) {
+    var preNodes = el.getElementsByTagName("pre");
+    var outputNode = preNodes[1];
+    outputNode.outerHTML = "<details open class='output'><summary>Output</summary>" + outputNode.outerHTML + "</details>";
+  })
+})();
+(function() {
+  var divHTML = document.querySelectorAll(".details");
+  divHTML.forEach(function (el) {
+    var preNodes = el.getElementsByTagName("pre");
+    var outputNode = preNodes[1];
+    outputNode.outerHTML = "<details class='output'><summary>Output</summary>" + outputNode.outerHTML + "</details>";
+  })
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
