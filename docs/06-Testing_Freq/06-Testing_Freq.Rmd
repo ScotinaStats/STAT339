@@ -363,7 +363,7 @@ Remember,  $\theta$ is fixed but **unknown**.
 - But *when* $H_{0}$ *is true*,  $\theta=\theta_{0}$,  and by the **Central Limit Theorem**,  $$\hat{\theta}\sim N(\theta_{0}, \sigma_{\hat{\theta}})\iff Z=\frac{\hat{\theta}-\theta_{0}}{\sigma_{\hat{\theta}}}\sim N(0, 1)$$
 
 
-Therefore,  an equivalent rejection region would be $$RR=\left\{\hat{\theta}:Z=\frac{\hat{\theta}-\theta_{0}}{\sigma_{\hat{\theta}}}>z_{\alpha}\right\}, $$ where $P(Z>z_{\alpha})=\alpha$
+Therefore,  an equivalent rejection region would be $$RR=\left\{\hat{\theta}:Z=\frac{\hat{\theta}-\theta_{0}}{\sigma_{\hat{\theta}}}>z_{\alpha}\right\}$$ where $P(Z>z_{\alpha})=\alpha$
 
 ---
 
