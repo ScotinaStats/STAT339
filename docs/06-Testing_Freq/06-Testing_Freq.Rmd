@@ -503,7 +503,7 @@ I collect some **DATA** and obtain the following:
 
 4. **Rejection Region**:
     - $\{z>z_{\alpha}\}$ (upper-tail RR)
-    - $\{z<z_{\alpha}\}$ (lower-tail RR)
+    - $\{z<-z_{\alpha}\}$ (lower-tail RR)
     - $\{|z|>z_{\alpha/2}\}$ (two-tailed RR)
     
 ---
