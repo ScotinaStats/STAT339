@@ -710,8 +710,6 @@ ggplot(data = data.frame(x = c(-4,  4)),  aes(x)) +
 ```
 ]
 
---
-
 .pull-right[
 The pink regions in the plot represent the **p-value** for a *two-tailed* test. 
 
@@ -721,8 +719,6 @@ The pink regions in the plot represent the **p-value** for a *two-tailed* test.
 2*pnorm(2.74,  lower.tail = FALSE)
 ```
 ]
-
---
 
 **Decision**: $p<0.05$,  so *reject the null hypothesis*. 
 
