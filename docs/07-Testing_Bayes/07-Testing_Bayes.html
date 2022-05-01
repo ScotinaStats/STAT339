@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>STAT 339: Statistical Theory</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Anthony Scotina" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+    <link rel="stylesheet" href="my-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# STAT 339: Statistical Theory
+## Bayesian Hypothesis Testing
+### Anthony Scotina
+
+---
+
+
+
+
+
+
+
+
+
+&lt;!--
+pagedown::chrome_print("~/Dropbox/Teaching/03-Simmons Courses/STAT339-Statistical Theory/Slides/06-Testing_Freq/06-Testing_Freq.html")
+--&gt;
+
+class: center,  middle,  frame
+
+# Bayes Factors
+
+---
+
+# A Slide about R
+
+Suppose I am interested in estimating the **proportion**, `\(p\)`, of *students at Simmons who have heard of R*. 
+
+- A *colleague* claims that this proportion is **over 1/3**, and I want to test how plausible this claim is. 
+
+.pull-left[
+&lt;img src="rstudio.png" width="214" /&gt;
+]
+
+.pull-right[
+I think `\(p\)` is over 40% but I'm not very confident in that estimate. Suppose we use the following hierarchy:
+
+- **Prior**: `\(p\sim Beta(8, 12)\)`
+
+- **Data**: `\(Y\mid p\sim Binomial(n=30, p)\)`, where we observe `\(Y = 12\)`
+]
+
+Using the *Beta-Binomial conjugacy*, our **posterior** distribution is `$$p\mid Y\sim Beta(8+12=\mathbf{20}, 12+30-12=\mathbf{30})$$`
+
+---
+
+# Is the "over 1/3" claim plausible?
+
+It's looking good! 😎
+
+.center[
+&lt;img src="07-Testing_Bayes_files/figure-html/unnamed-chunk-4-1.png" width="70%" /&gt;
+]
+
+
+```r
+# 95% Credible Interval
+qbeta(c(0.025, 0.975), 20, 30)
+```
+
+```
+## [1] 0.2699671 0.5376145
+```
+
+---
+
+# Posterior Probability
+
+While the **visual** of the posterior PDF and the 95% **credible interval** help, we can calculate the **posterior probability** of `\(p\)` being *over 1/3*:
+
+.center[
+&lt;img src="07-Testing_Bayes_files/figure-html/unnamed-chunk-6-1.png" width="70%" /&gt;
+]
+
+
+```r
+1 - pbeta(1/3, 20, 30)
+```
+
+```
+## [1] 0.8317821
+```
+
+---
+
+# Bayesian Hypothesis Testing
+
+We can frame our analysis as two competing **hypotheses**:
+
+- **Null Hypothesis**, `\(H_{0}:p\leq 0.33\)` (*p* is *at most* 33%)
+
+- **Alternative Hypothesis**, `\(H_{A}:p&gt;0.33\)`
+
+--
+
+We just calculated the posterior probability of the *alternative hypothesis*: `$$P(H_{A}\mid Y=12)=0.832$$`
+
+- Therefore, the posterior probability of the *null hypothesis* is just the **complement**! `$$P(H_{0}\mid Y=12)=1-0.832=0.168$$`
+
+---
+
+# Posterior and Prior Odds
+
+We can put these two probabilities together to form the **posterior odds**: `$$\text{posterior odds}=\frac{P(H_{A}\mid Y=12)}{P(H_{0}\mid Y=12)}=\frac{0.832}{0.168}=\boxed{4.952}$$`
+
+- Our *posterior assessment* is that `\(p\)` is 4.952 times more likely to be *above 1/3* than to be *below 1/3*. 
+
+--
+
+What about the odds **prior** to observing data?? Let's calculate **prior odds**. 
+
+- **Recall**: Our *prior* for `\(p\)` was `\(p\sim Beta(8, 12)\)`. Then `\(P(H_{A})=P(p&gt;1/3)\)`:
+
+
+```r
+1 - pbeta(1/3, 8, 12)
+```
+
+```
+## [1] 0.7206633
+```
+
+
+`$$\text{prior odds}=\frac{P(H_{A})}{P(H_{0})}=\frac{0.721}{1-0.721}=\boxed{2.584}$$`
+
+---
+
+# Bayes Factors (BF)
+
+By comparing the *posterior odds* to the *prior odds*, we can obtain the **Bayes Factor**: `$$BF = \frac{\text{posterior odds}}{\text{prior odds}}=\frac{P(H_{A}\mid Y)/P(H_{0}\mid Y)}{P(H_{A})/P(H_{0})}$$`
+
+- The Bayes Factor will provide some insight into how much our understanding of R familiarity at Simmons evolved after observing sample data. 
+
+--
+
+
+```r
+# Bayes Factor
+4.952/2.584 # posterior_odds / prior_odds
+```
+
+```
+## [1] 1.916409
+```
+
+Because the BF is a *ratio*, we should compare it to **1**. 
+
+---
+
+# Bayes Factor Scenarios
+
+
+```r
+# Bayes Factor
+4.952/2.584 # posterior_odds / prior_odds
+```
+
+```
+## [1] 1.916409
+```
+
+From [Bayes Rules!](https://www.bayesrulesbook.com/chapter-8.html#posterior-hypothesis-testing):
+
+1. BF `\(=1\)`: The plausibility of `\(H_{A}\)` *didn't* change in light of the observed data. 
+
+2. BF `\(&gt;1\)`: The plausibility of `\(H_{A}\)` *increased* in light of the observed data. 
+    - The greater the Bayes Factor, the more convincing the evidence for `\(H_{A}\)`. 
+    
+3. BF `\(&lt;1\)`: The plausibility of `\(H_{A}\)` *decreased* in light of the observed data.
+
+--
+
+While the **posterior probability** of `\(H_{A}\)`, `\(P(H_{A}\mid Y=12)=0.832\)`, is quite high, the BF `\(&lt;1\)` established that the plausibility of my colleague's claim has *decreased* in light of the observed data. 
+
+---
+
+# ⛔BF Cut-Offs ⛔
+
+While the statistics community generally advocates *against* using hypothesis testing to make **rigid conclusions**, there are tables out there that provide cut-off values for BFs. 
+
+For example, from [Jeffreys (1998)](https://books.google.com/books?id=vh9Act9rtzQC&amp;pg=PA432#v=onepage&amp;q&amp;f=false):
+
+- BF `\(&lt;1\)`: Null hypothesis supported😢
+- `\(1&lt;\)` BF `\(&lt;10^{1/2}\)`: Evidence against `\(H_{0}\)` "not worth more than a bare mention"🔥
+- `\(10^{1/2}&lt;\)` BF `\(&lt;10^{1}\)`: Evidence against `\(H_{0}\)` "substantial"🔥🔥
+- `\(10^{1}&lt;\)` BF `\(&lt;10^{3/2}\)`: Evidence against `\(H_{0}\)` "strong"🔥🔥🔥
+- `\(10^{3/2}&lt;\)` BF `\(&lt;10^{2}\)`: Evidence against `\(H_{0}\)` "very strong"🔥🔥🔥🔥
+- BF `\(&gt;10^{2}\)`: Evidence against `\(H_{0}\)` "decisive"🔥🔥🔥🔥🔥
+
+--
+
+Don't actually use cut-offs, though! Science is more *nuanced*, and each hypothesis test and associated *context* should be considered individually. 🔥🔥🔥🔥🔥🔥
+
+---
+
+# ⛔Be careful with BFs!⛔
+
+Bayes Factors themselves aren't bad *per se*. 
+
+- But **null hypothesis significance testing** can be, and Bayes Factors are often used in this context!
+
+Whether we use the *frequentist* or *Bayesian* perspective, we'll usually be able to reject a "no effect" null hypothesis by **gathering enough data**. 
+
+--
+
+**Example**
+
+Let's repeat the previous exercise with:
+
+(i) `\(n = 1000\)` and `\(Y = 400\)`
+
+(ii) `\(n = 5\)` and `\(Y = 2\)`
+
+(In either case, the sample proportion is 0.4...)
+
+---
+
+# Example
+
+(**Bayes Rules! Exercise 8.9**)
+
+For parameter `\(p\)` suppose you have a Beta(1,0.8) prior model and a Beta(4,3) posterior. You wish to test the null hypothesis that `\(p\leq0.4\)` versus the alternative that `\(p&gt;0.4\)`. 
+
+.center[
+[*Moose pic to fill space* 👇]
+
+&lt;img src="moose.jpg" width="40%" /&gt;
+]
+
+---
+
+class: center, middle, frame
+
+# Two-Sided Tests
+
+---
+
+# Two-Sided Hypotheses
+
+Let's revisit the R familiarity example from earlier. But suppose now that we're interested in testing *whether or not* 50% of the students at Simmons have heard of R. 
+
+- In other words, we're testing a **two-sided hypothesis**: `$$H_{0}:p=0.5\quad\text{versus}\quad H_{A}:p\neq 0.5$$`
+
+We've seen this type of test under the **frequentist perspective**, but we hit a roadblock when trying to apply *Bayesian* techniques...
+
+--
+
+&lt;br&gt;
+
+While the Bayesian perspective allows us to calculate the *probability* that `\(H_{A}\)` or `\(H_{0}\)` is true, we can't really do this when `\(p\)` is **continuous**!
+
+.center[
+# 😩😩😩
+]
+
+---
+
+# Bayes Factors (BF)
+
+Recall that, by comparing the *posterior odds* to the *prior odds*, we can obtain the **Bayes Factor**: `$$BF = \frac{\text{posterior odds}}{\text{prior odds}}=\frac{P(H_{A}\mid Y)/P(H_{0}\mid Y)}{P(H_{A})/P(H_{0})}$$`
+
+However, when we try to calculate the **posterior probability** that `\(H_{0}\)` is true, `\(P(H_{0}\mid Y=12)\)`, we get zero! `$$P(p=0.33\mid Y=12)=\int_{0.33}^{0.33}f(p\mid y=12)\, dp=0$$`
+
+- Therefore, the posterior odds are `$$\frac{P(H_{A}\mid Y)}{P(H_{0}\mid Y)}=\frac{1}{0}=🤯🤯🤯$$`
+
+---
+
+# Using Credible Intervals
+
+While we *clearly* can't divide by zero, we could use **credible intervals** to devise an approach to handling two-sided Bayesian hypothesis tests. 
+
+Recall that a **95% credible interval** for `\(p\)` is `\((0.234, 0.496)\)`. 
+
+
+```r
+# 95% Credible Interval
+qbeta(c(0.025, 0.975), 18, 32)
+```
+
+```
+## [1] 0.2342242 0.4963872
+```
+
+- Using this, we have a *small* degree of evidence that the `\(H_{A}\)` is true. 
+    - The hypothesized value of `\(p\)`, 0.5, falls *just outside* the credible interval. 
+    
+While one might argue that 0.5 isn't *substantially* outside of the credible interval, we should define what "substantial" means ahead of time!
+
+---
+
+# Bayesian Testing, with a Buffer
+
+Rather than testing `$$H_{0}:p=0.5\quad\text{versus}\quad H_{A}:p\neq 0.5,$$` what if instead we tested `$$H_{0}:p\in (0.45, 0.55)\text{versus}\quad H_{A}:p\notin (0.45, 0.55)$$`
+
+&lt;br&gt;
+
+With this **buffer** in place, we can more rigorously claim *uncertainty* in the plausbility of `\(H_{A}\)`.
+
+- The hypothesized range of `\(p\)`, `\((0.45, 0.55)\)`, overlaps with the credible interval, `\((0.234, 0.496)\)`. 
+
+- We could also calculate the Bayes Factor, since we'll no longer be dividing by zero!
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"countIncrementalSlides": false,
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+<script>
+(function() {
+  var divHTML = document.querySelectorAll(".details-open");
+  divHTML.forEach(function (el) {
+    var preNodes = el.getElementsByTagName("pre");
+    var outputNode = preNodes[1];
+    outputNode.outerHTML = "<details open class='output'><summary>Output</summary>" + outputNode.outerHTML + "</details>";
+  })
+})();
+(function() {
+  var divHTML = document.querySelectorAll(".details");
+  divHTML.forEach(function (el) {
+    var preNodes = el.getElementsByTagName("pre");
+    var outputNode = preNodes[1];
+    outputNode.outerHTML = "<details class='output'><summary>Output</summary>" + outputNode.outerHTML + "</details>";
+  })
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
