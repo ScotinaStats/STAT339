@@ -27,7 +27,7 @@ class: center, middle, inverse, title-slide
 
 
 &lt;!--
-pagedown::chrome_print("~/Dropbox/Teaching/03-Simmons Courses/STAT339-Statistical Theory/Slides/06-Testing_Freq/06-Testing_Freq.html")
+pagedown::chrome_print("~/Dropbox/Teaching/03-Simmons Courses/STAT339-Statistical Theory/Slides/07-Testing_Bayes/07-Testing_Bayes.html")
 --&gt;
 
 class: center,  middle,  frame
@@ -40,25 +40,25 @@ class: center,  middle,  frame
 
 Suppose I am interested in estimating the **proportion**, `\(p\)`, of *students at Simmons who have heard of R*. 
 
-- A *colleague* claims that this proportion is **over 1/3**, and I want to test how plausible this claim is. 
+- A *colleague* claims that this proportion is **over 25%**, and I want to test how plausible this claim is. 
 
 .pull-left[
 &lt;img src="rstudio.png" width="214" /&gt;
 ]
 
 .pull-right[
-I think `\(p\)` is over 40% but I'm not very confident in that estimate. Suppose we use the following hierarchy:
+I actually think `\(p\)` is over 1/3 but I'm not very confident in that estimate. Suppose we use the following hierarchy:
 
-- **Prior**: `\(p\sim Beta(8, 12)\)`
+- **Prior**: `\(p\sim Beta(9, 18)\)`
 
-- **Data**: `\(Y\mid p\sim Binomial(n=30, p)\)`, where we observe `\(Y = 12\)`
+- **Data**: `\(Y\mid p\sim Binomial(n=30, p)\)`, where we observe `\(Y = 9\)`
 ]
 
-Using the *Beta-Binomial conjugacy*, our **posterior** distribution is `$$p\mid Y\sim Beta(8+12=\mathbf{20}, 12+30-12=\mathbf{30})$$`
+Using the *Beta-Binomial conjugacy*, our **posterior** distribution is `$$p\mid Y\sim Beta(9+9=\mathbf{18}, 18+30-9=\mathbf{39})$$`
 
 ---
 
-# Is the "over 1/3" claim plausible?
+# Is the "over 25%" claim plausible?
 
 It's looking good! 😎
 
@@ -69,18 +69,18 @@ It's looking good! 😎
 
 ```r
 # 95% Credible Interval
-qbeta(c(0.025, 0.975), 20, 30)
+qbeta(c(0.025, 0.975), 18, 39)
 ```
 
 ```
-## [1] 0.2699671 0.5376145
+## [1] 0.2028545 0.4409674
 ```
 
 ---
 
 # Posterior Probability
 
-While the **visual** of the posterior PDF and the 95% **credible interval** help, we can calculate the **posterior probability** of `\(p\)` being *over 1/3*:
+While the **visual** of the posterior PDF and the 95% **credible interval** help, we can calculate the **posterior probability** of `\(p\)` being *over 0.25*:
 
 .center[
 &lt;img src="07-Testing_Bayes_files/figure-html/unnamed-chunk-6-1.png" width="70%" /&gt;
@@ -88,11 +88,11 @@ While the **visual** of the posterior PDF and the 95% **credible interval** help
 
 
 ```r
-1 - pbeta(1/3, 20, 30)
+1 - pbeta(0.25, 18, 39)
 ```
 
 ```
-## [1] 0.8317821
+## [1] 0.8593457
 ```
 
 ---
@@ -101,41 +101,41 @@ While the **visual** of the posterior PDF and the 95% **credible interval** help
 
 We can frame our analysis as two competing **hypotheses**:
 
-- **Null Hypothesis**, `\(H_{0}:p\leq 0.33\)` (*p* is *at most* 33%)
+- **Null Hypothesis**, `\(H_{0}:p\leq 0.25\)` (*p* is *at most* 25%)
 
-- **Alternative Hypothesis**, `\(H_{A}:p&gt;0.33\)`
+- **Alternative Hypothesis**, `\(H_{A}:p&gt;0.25\)`
 
 --
 
-We just calculated the posterior probability of the *alternative hypothesis*: `$$P(H_{A}\mid Y=12)=0.832$$`
+We just calculated the posterior probability of the *alternative hypothesis*: `$$P(H_{A}\mid Y=9)=0.859$$`
 
-- Therefore, the posterior probability of the *null hypothesis* is just the **complement**! `$$P(H_{0}\mid Y=12)=1-0.832=0.168$$`
+- Therefore, the posterior probability of the *null hypothesis* is just the **complement**! `$$P(H_{0}\mid Y=9)=1-0.859=0.141$$`
 
 ---
 
 # Posterior and Prior Odds
 
-We can put these two probabilities together to form the **posterior odds**: `$$\text{posterior odds}=\frac{P(H_{A}\mid Y=12)}{P(H_{0}\mid Y=12)}=\frac{0.832}{0.168}=\boxed{4.952}$$`
+We can put these two probabilities together to form the **posterior odds**: `$$\text{posterior odds}=\frac{P(H_{A}\mid Y=9)}{P(H_{0}\mid Y=9)}=\frac{0.859}{0.141}=\boxed{6.092}$$`
 
-- Our *posterior assessment* is that `\(p\)` is 4.952 times more likely to be *above 1/3* than to be *below 1/3*. 
+- Our *posterior assessment* is that `\(p\)` is 6.092 times more likely to be *above 0.25* than to be *below 0.25*. 
 
 --
 
 What about the odds **prior** to observing data?? Let's calculate **prior odds**. 
 
-- **Recall**: Our *prior* for `\(p\)` was `\(p\sim Beta(8, 12)\)`. Then `\(P(H_{A})=P(p&gt;1/3)\)`:
+- **Recall**: Our *prior* for `\(p\)` was `\(p\sim Beta(9, 18)\)`. Then `\(P(H_{A})=P(p&gt;0.25)\)`:
 
 
 ```r
-1 - pbeta(1/3, 8, 12)
+1 - pbeta(0.25, 9, 18)
 ```
 
 ```
-## [1] 0.7206633
+## [1] 0.8195483
 ```
 
 
-`$$\text{prior odds}=\frac{P(H_{A})}{P(H_{0})}=\frac{0.721}{1-0.721}=\boxed{2.584}$$`
+`$$\text{prior odds}=\frac{P(H_{A})}{P(H_{0})}=\frac{0.820}{1-0.820}=\boxed{4.556}$$`
 
 ---
 
@@ -150,11 +150,11 @@ By comparing the *posterior odds* to the *prior odds*, we can obtain the **Bayes
 
 ```r
 # Bayes Factor
-4.952/2.584 # posterior_odds / prior_odds
+6.092/4.556 # posterior_odds / prior_odds
 ```
 
 ```
-## [1] 1.916409
+## [1] 1.337138
 ```
 
 Because the BF is a *ratio*, we should compare it to **1**. 
@@ -166,11 +166,11 @@ Because the BF is a *ratio*, we should compare it to **1**.
 
 ```r
 # Bayes Factor
-4.952/2.584 # posterior_odds / prior_odds
+6.092/4.556 # posterior_odds / prior_odds
 ```
 
 ```
-## [1] 1.916409
+## [1] 1.337138
 ```
 
 From [Bayes Rules!](https://www.bayesrulesbook.com/chapter-8.html#posterior-hypothesis-testing):
@@ -184,7 +184,7 @@ From [Bayes Rules!](https://www.bayesrulesbook.com/chapter-8.html#posterior-hypo
 
 --
 
-While the **posterior probability** of `\(H_{A}\)`, `\(P(H_{A}\mid Y=12)=0.832\)`, is quite high, the BF `\(&lt;1\)` established that the plausibility of my colleague's claim has *decreased* in light of the observed data. 
+The **posterior probability** of `\(H_{A}\)`, `\(P(H_{A}\mid Y=9)=0.859\)`, is quite high, and the BF `\(&gt;1\)` established that the plausibility of my colleague's claim has *increased* in light of the observed data. 
 
 ---
 
@@ -221,11 +221,11 @@ Whether we use the *frequentist* or *Bayesian* perspective, we'll usually be abl
 
 Let's repeat the previous exercise with:
 
-(i) `\(n = 1000\)` and `\(Y = 400\)`
+(i) `\(n = 1000\)` and `\(Y = 300\)`
 
-(ii) `\(n = 5\)` and `\(Y = 2\)`
+(ii) `\(n = 6\)` and `\(Y = 2\)`
 
-(In either case, the sample proportion is 0.4...)
+(In either case, the sample proportion is ~0.3...)
 
 ---
 
@@ -273,7 +273,7 @@ While the Bayesian perspective allows us to calculate the *probability* that `\(
 
 Recall that, by comparing the *posterior odds* to the *prior odds*, we can obtain the **Bayes Factor**: `$$BF = \frac{\text{posterior odds}}{\text{prior odds}}=\frac{P(H_{A}\mid Y)/P(H_{0}\mid Y)}{P(H_{A})/P(H_{0})}$$`
 
-However, when we try to calculate the **posterior probability** that `\(H_{0}\)` is true, `\(P(H_{0}\mid Y=12)\)`, we get zero! `$$P(p=0.33\mid Y=12)=\int_{0.33}^{0.33}f(p\mid y=12)\, dp=0$$`
+However, when we try to calculate the **posterior probability** that `\(H_{0}\)` is true, `\(P(H_{0}\mid Y=9)\)`, we get zero! `$$P(p=0.5\mid Y=9)=\int_{0.5}^{0.5}f(p\mid y=9)\, dp=0$$`
 
 - Therefore, the posterior odds are `$$\frac{P(H_{A}\mid Y)}{P(H_{0}\mid Y)}=\frac{1}{0}=🤯🤯🤯$$`
 
@@ -283,16 +283,16 @@ However, when we try to calculate the **posterior probability** that `\(H_{0}\)`
 
 While we *clearly* can't divide by zero, we could use **credible intervals** to devise an approach to handling two-sided Bayesian hypothesis tests. 
 
-Recall that a **95% credible interval** for `\(p\)` is `\((0.234, 0.496)\)`. 
+Recall that a **95% posterior credible interval** for `\(p\)` is `\((0.203, 0.441)\)`. 
 
 
 ```r
 # 95% Credible Interval
-qbeta(c(0.025, 0.975), 18, 32)
+qbeta(c(0.025, 0.975), 18, 39)
 ```
 
 ```
-## [1] 0.2342242 0.4963872
+## [1] 0.2028545 0.4409674
 ```
 
 - Using this, we have a *small* degree of evidence that the `\(H_{A}\)` is true. 
@@ -308,11 +308,13 @@ Rather than testing `$$H_{0}:p=0.5\quad\text{versus}\quad H_{A}:p\neq 0.5,$$` wh
 
 &lt;br&gt;
 
-With this **buffer** in place, we can more rigorously claim *uncertainty* in the plausbility of `\(H_{A}\)`.
+With this **buffer** in place, we can more rigorously claim *uncertainty* in the plausibility of `\(H_{A}\)`.
 
-- The hypothesized range of `\(p\)`, `\((0.45, 0.55)\)`, overlaps with the credible interval, `\((0.234, 0.496)\)`. 
+- The hypothesized range of `\(p\)`, `\((0.45, 0.55)\)`, lies *entirely above* the credible interval, `\((0.203, 0.441)\)`. 
 
 - We could also calculate the Bayes Factor, since we'll no longer be dividing by zero!
+
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
